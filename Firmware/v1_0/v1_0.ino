@@ -1,7 +1,7 @@
 //LIBs --------------------------------------------------------------------------------
   #include <LCD5110_Graph.h>
 //IOs ---------------------------------------------------------------------------------
-  // LCD MODULE 
+  // LCD MODULE
     #define LCD_CLK 8
     #define LCD_MOSI 9
     #define LCD_DC 10
@@ -20,11 +20,11 @@ void setup() {
     //LCD
       myDisplay.InitLCD(55);
       toggle = true;
-      
+
 
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-
+  
 }
