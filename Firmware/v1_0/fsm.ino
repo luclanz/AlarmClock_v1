@@ -10,6 +10,14 @@ void fsm(){
     downButton.poll();
   //updating time
     alarmClockData.now = rtc.now(); 
+
+  //pulse
+    if (alarmClockData.pulseInfo) {
+      if (millis() > (alarmClockData.startTimePulse + TIMEDELAY)) {
+        digitalWrite(LCD_LIGHT, HIGH);
+        alarmClockData.pulseInfo = false;
+      }
+    }
     
   //fsm engine
     switch(stateFSM) {
@@ -19,22 +27,51 @@ void fsm(){
         
       case FSM_HOME:
         displayHome();
+
+        if (topButton.buttonClicked) {
+          alarmClockData.pulseInfo = true;
+          digitalWrite(LCD_LIGHT, LOW); 
+          alarmClockData.startTimePulse = millis();  
+        }
+        
         if (upButton.buttonClicked) {
           stateFSM = FSM_ALARM;
           break;
         }
-//        if (downButton.buttonHolded) {
-//          stateFSM = FSM_SETTIME;
-//          break;
-//        }
+        if (downButton.buttonHolded) {
+          stateFSM = FSM_SETTIME;
+          break;
+        }
         break;
         
-//      case FSM_SETTIME:
-//        if (topButton.buttonClicked || downButton.buttonClicked) {
-//          stateFSM = FSM_HOME;
-//          break;
-//        }
-//        break;
+      case FSM_SETTIME:
+        displaySetHome();
+
+
+        if (upButton.buttonClicked) {
+          if (alarmClockData.twoStepSet == 1) {
+            stateFSM = FSM_HOME;
+            alarmClockData.twoStepSet = 0;
+            break;  
+          };
+          alarmClockData.twoStepSet += 1;
+        }
+
+        if (downButton.buttonHolded) {
+          alarmClockData.twoStepSet = 0;
+          stateFSM = FSM_HOME;
+          alarmClockData.hoursOffset = 0;
+          alarmClockData.minutesOffset = 0;
+        }
+      
+        if (topButton.buttonClicked || downButton.buttonClicked) {
+          alarmClockData.twoStepSet = 0;
+          stateFSM = FSM_HOME;
+          break;
+        }
+
+        
+        break;
         
       case FSM_ALARM:
         displayAlarm();

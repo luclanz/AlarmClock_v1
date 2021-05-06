@@ -17,13 +17,19 @@
     char daysOfTheWeek[7][4] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
     char monthsOfTheYear [13][4] = {"DEC", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
   //5110LCD
-    LCD5110 myGLCD(LCD_CLK, LCD_MOSI, LCD_DC, LCD_RST, LCD_CS);
+    LCD5110 myGLCD(LCD_CLK, LCD_DIN, LCD_DC, LCD_RST, LCD_CE);
     extern uint8_t SmallFont[];                   // uint8_t -> byte
     extern uint8_t TinyFont[];
     extern uint8_t MediumNumbers[];
     extern uint8_t BigNumbers[];
   //MAIN STRUCT ALARM
     struct alarmClock_struct {
+
+      boolean pulseInfo = false;            //two variables to make the display light up for a brief period
+      uint32_t startTimePulse;
+
+      uint8_t hoursOffset = 0;
+      uint8_t minutesOffset = 0;
       
       uint8_t timerMinutes = 10;            //how can I set these in turn-on? 
       uint8_t timerSeconds = 0;
@@ -50,12 +56,15 @@ void setup() {
     //rtc
       rtcSetupRoutine();
     //lcd 
+      pinMode(LCD_LIGHT, OUTPUT);
+      digitalWrite(LCD_LIGHT, HIGH);
       myGLCD.InitLCD(65);
 
 }
 
 void loop() {
   fsm(); 
+  delay(5);
 }
 
 //-----------------------------------------------------------------------------------------

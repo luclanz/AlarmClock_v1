@@ -10,13 +10,17 @@
     #define BT_DOWN 5
   // DS3231
     #define RTC_INTERRUPT 2
-
   // LCD MODULE
     #define LCD_CLK 10
-    #define LCD_MOSI 9
+    #define LCD_DIN 9
     #define LCD_DC 8
-    #define LCD_CS A1
+    #define LCD_CE A1
     #define LCD_RST A0
+
+    #define LCD_LIGHT 11
+    
+  // internal pulse
+    #define TIMEDELAY 2000
 
 //FSM ---------------------------------------------------------------------------------
   #define FSM_RST 0

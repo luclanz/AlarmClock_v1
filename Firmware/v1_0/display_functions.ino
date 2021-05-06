@@ -5,29 +5,71 @@ void displayHome () {
   myGLCD.clrScr();
   myGLCD.setFont(BigNumbers);
                   //(num, x, y, lenght, spacer)
-  myGLCD.printNumI(alarmClockData.now.hour(), 13, 12, 2, '0');        //position of minutes / hours
-  myGLCD.printNumI(alarmClockData.now.minute(), 47, 12, 2, '0');
+  myGLCD.printNumI(alarmClockData.now.hour() + alarmClockData.hoursOffset, 13, 12, 2, '0');        //position of minutes / hours
+  myGLCD.printNumI(alarmClockData.now.minute() + alarmClockData.minutesOffset, 47, 12, 2, '0');
 
   myGLCD.setFont(TinyFont);
 
-  String weekDisplay = daysOfTheWeek[alarmClockData.now.dayOfTheWeek()];
-  String numberDisplay = String(alarmClockData.now.day());
-  String monthDisplay = monthsOfTheYear[alarmClockData.now.month()];
-  
-  myGLCD.print(weekDisplay + " " + numberDisplay + " " + monthDisplay, RIGHT, 43);
+  if (alarmClockData.pulseInfo) {
+   
+    String weekDisplay = daysOfTheWeek[alarmClockData.now.dayOfTheWeek()];
+    String numberDisplay = String(alarmClockData.now.day());
+    String monthDisplay = monthsOfTheYear[alarmClockData.now.month()];
 
-//  if (toggle == true) 
-//  {
-    myGLCD.drawCircle(44, 21, 1);               //circles that makes my ":"
-    myGLCD.drawCircle(44, 27, 1);
-//    toggle = false;
-//  }
-//  else 
-//  {
-//    toggle = true;
-//  }
+    if (alarmClockData.timerOnOff) {
+      myGLCD.print("Timer", 50, 4);
+    }
+    
+    if (alarmClockData.alarmOnOff) {
+      myGLCD.print("Alarm", 15, 4);
+    }
+    
+    myGLCD.print(weekDisplay + " " + numberDisplay + " " + monthDisplay, 28, 41);
+    
+  }
+  
+  myGLCD.drawCircle(44, 21, 1);               //circles that makes my ":"
+  myGLCD.drawCircle(44, 27, 1);
+
   myGLCD.update();
 }
+
+
+void displaySetHome() {
+  
+  myGLCD.clrScr();
+  myGLCD.setFont(BigNumbers);
+                  //(num, x, y, lenght, spacer)
+  myGLCD.printNumI(alarmClockData.now.hour() + alarmClockData.hoursOffset, 13, 12, 2, '0');        //position of minutes / hours
+  myGLCD.printNumI(alarmClockData.now.minute() + alarmClockData.minutesOffset, 47, 12, 2, '0');
+
+  myGLCD.drawCircle(44, 21, 1);               //circles that makes my ":"
+  myGLCD.drawCircle(44, 27, 1);
+
+  myGLCD.setFont(TinyFont);
+
+  myGLCD.print("<--", 0, 33);
+  myGLCD.print("res", 0, 40);
+  myGLCD.drawLine(0, 46, 3, 46);
+  myGLCD.drawLine(4, 46, 6, 46);
+  myGLCD.drawLine(7, 46, 10, 46);
+  
+  myGLCD.print("okay", 0, 5);
+
+  if (alarmClockData.twoStepSet == 0) {
+      //hour block
+      myGLCD.drawLine(20, 38, 36, 38);
+      myGLCD.drawLine(20, 10, 36, 10);
+  } else {
+      //min block
+      myGLCD.drawLine(53, 38, 69, 38);
+      myGLCD.drawLine(53, 10, 69, 10);  
+  };
+
+  myGLCD.update();
+}
+
+
 
 void displaySetAlarm() {
   myGLCD.clrScr();
@@ -100,12 +142,12 @@ void displayTimer () {
   if (alarmClockData.timerOnOff) {
     myGLCD.print("Timer: ON", 25, 4);
   } else {
-    myGLCD.print("Timer: OFF", 25, 4);  
+    myGLCD.print("Timer: PAUSE", 25, 4);  
   }
  
   myGLCD.print("(m)", 23, 39);
   myGLCD.print("(s)", 57, 39);
-  myGLCD.print("tog", 0, 33);
+  myGLCD.print("I/0", 0, 33);
   myGLCD.print("set", 0, 40);
   myGLCD.drawLine(0, 46, 3, 46);
   myGLCD.drawLine(4, 46, 6, 46);
