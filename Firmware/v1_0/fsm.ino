@@ -45,8 +45,8 @@ void fsm(){
         break;
         
       case FSM_SETTIME:
+        rotaryUpdateTime();
         displaySetHome();
-
 
         if (upButton.buttonClicked) {
           if (alarmClockData.twoStepSet == 1) {
@@ -95,6 +95,7 @@ void fsm(){
         break;
         
       case FSM_SETALARM:
+        rotaryUpdateAlarm();
         displaySetAlarm();
 
         if (upButton.buttonClicked) {
@@ -137,6 +138,7 @@ void fsm(){
         break;
         
       case FSM_SETTIMER:
+        rotaryUpdateTimer();
         displaySetTimer();
 
         if (upButton.buttonClicked) {
@@ -163,6 +165,7 @@ void fsm(){
     
   if (prevStateFSM != stateFSM) {
     printState(stateFSM);
+    rotaryCounter = 0;
   }
 }
 

@@ -45,6 +45,10 @@
     };
     typedef struct alarmClock_struct alarmClock_struct;
     alarmClock_struct alarmClockData;
+  // rotary encoder variables
+    int rotaryCounter = 0;                            //Value of the knob
+    int rotaryCurrentStateCLK, rotaryLastStateCLK;          //Value of CLK output
+    String rotaryCurrentDir ="";                      //Direction
 
 void setup() {
   Serial.begin(9600);
@@ -58,16 +62,20 @@ void setup() {
     //lcd 
       pinMode(LCD_LIGHT, OUTPUT);
       digitalWrite(LCD_LIGHT, HIGH);
-      myGLCD.InitLCD(65);
-
+      myGLCD.InitLCD(60);
+    //rotary enc
+      rotarySetupRoutine();
 }
 
 void loop() {
+
+// check alarm / timer routine
   fsm(); 
-  delay(5);
+  //delay(5);
 }
 
-//-----------------------------------------------------------------------------------------
+
+// RTC -------------------------------------------------------------------------------------
 void rtcSetTimerInterrupt (int secondToTimer) {
 
   if(!rtc.setAlarm1(rtc.now() + TimeSpan(secondToTimer), DS3231_A1_Second)) {
@@ -79,11 +87,9 @@ void rtcSetTimerInterrupt (int secondToTimer) {
   }
 
 }
-//-----------------------------------------------------------------------------------------
 void onAlarm() {
   Serial.println("Alarm OCCURED!");
 }
-//-----------------------------------------------------------------------------------------
 void rtcSetupRoutine() {
 
     // initializing the rtc
@@ -99,12 +105,12 @@ void rtcSetupRoutine() {
     }
     
     // Making it so, that the alarm will trigger an interrupt
-    pinMode(RTC_INTERRUPT, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(RTC_INTERRUPT), onAlarm, FALLING);      //here's the func to call
-
-    rtc.disable32K();
-    rtc.clearAlarm(1);
-    rtc.clearAlarm(2);
-    rtc.writeSqwPinMode(DS3231_OFF);
-    rtc.disableAlarm(2);
+//    pinMode(RTC_INTERRUPT, INPUT_PULLUP);
+//    attachInterrupt(digitalPinToInterrupt(RTC_INTERRUPT), onAlarm, FALLING);      //here's the func to call
+//
+//    rtc.disable32K();
+//    rtc.clearAlarm(1);
+//    rtc.clearAlarm(2);
+//    rtc.writeSqwPinMode(DS3231_OFF);
+//    rtc.disableAlarm(2);
 }

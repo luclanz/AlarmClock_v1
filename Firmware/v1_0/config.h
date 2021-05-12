@@ -9,18 +9,19 @@
     #define BT_UP 6
     #define BT_DOWN 5
   // DS3231
-    #define RTC_INTERRUPT 2
+//    #define RTC_INTERRUPT 2
   // LCD MODULE
-    #define LCD_CLK 10
-    #define LCD_DIN 9
-    #define LCD_DC 8
-    #define LCD_CE A1
-    #define LCD_RST A0
-
-    #define LCD_LIGHT 11
-    
+    #define LCD_CLK 10      //10k ohm level shifter
+    #define LCD_DIN 9       //10k ohm level shifter
+    #define LCD_DC 8        //10k ohm level shifter
+    #define LCD_CE A1       //220 ohm level shifter
+    #define LCD_RST A0      //10k ohm level shifter
+    #define LCD_LIGHT 11    //330 ohm level shifter
   // internal pulse
     #define TIMEDELAY 2000
+  // ROTARY ENCODER
+    #define ROT_CLK 2
+    #define ROT_DT 3
 
 //FSM ---------------------------------------------------------------------------------
   #define FSM_RST 0
