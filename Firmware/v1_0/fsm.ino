@@ -26,145 +26,79 @@ void fsm(){
         break;
         
       case FSM_HOME:
-        displayHome();
-
         if (topButton.buttonClicked) {
           alarmClockData.pulseInfo = true;
           digitalWrite(LCD_LIGHT, LOW); 
           alarmClockData.startTimePulse = millis();  
         }
         
-        if (upButton.buttonClicked) {
-          stateFSM = FSM_ALARM;
-          break;
-        }
-        if (downButton.buttonHolded) {
-          stateFSM = FSM_SETTIME;
-          break;
-        }
+        displayHome();
+        goFromHome();
+        
         break;
         
       case FSM_SETTIME:
+
+        //update counter
+      
         rotaryUpdateTime();
         displaySetHome();
-
-        if (upButton.buttonClicked) {
-          if (alarmClockData.twoStepSet == 1) {
-            stateFSM = FSM_HOME;
-            alarmClockData.twoStepSet = 0;
-            break;  
-          };
-          alarmClockData.twoStepSet += 1;
-        }
-
-        if (downButton.buttonHolded) {
-          alarmClockData.twoStepSet = 0;
-          stateFSM = FSM_HOME;
-          alarmClockData.hoursOffset = 0;
-          alarmClockData.minutesOffset = 0;
-        }
-      
-        if (topButton.buttonClicked || downButton.buttonClicked) {
-          alarmClockData.twoStepSet = 0;
-          stateFSM = FSM_HOME;
-          break;
-        }
-
-        
+        goFromSetTime();
+  
         break;
         
       case FSM_ALARM:
         displayAlarm();
-        if (topButton.buttonClicked) {
-          stateFSM = FSM_HOME;
-          break;
-        }
-        if (upButton.buttonClicked) {
-          stateFSM = FSM_TIMER;
-          break;
-        }
+        goFromAlarm();
 
-        if (downButton.buttonClicked) {
-          alarmClockData.alarmOnOff = !alarmClockData.alarmOnOff;
-        }
-        
-        if (downButton.buttonHolded) {
-          stateFSM = FSM_SETALARM;
-          break;
-        }
         break;
         
       case FSM_SETALARM:
+
+        if (rotaryInitCounter) {
+          if (alarmClockData.twoStepSet == 0) {
+            rotaryCounter = alarmClockData.alarmHours;
+          } else {
+            rotaryCounter = alarmClockData.alarmMinutes;
+          }
+          rotaryInitCounter = false;
+        }
+      
         rotaryUpdateAlarm();
         displaySetAlarm();
+        goFromSetAlarm();
 
-        if (upButton.buttonClicked) {
-          if (alarmClockData.twoStepSet == 1) {
-            stateFSM = FSM_ALARM;
-            alarmClockData.twoStepSet = 0;
-            break;  
-          };
-          alarmClockData.twoStepSet += 1;
-        }
-        
-        
-        if (topButton.buttonClicked) {
-          stateFSM = FSM_HOME;
-          alarmClockData.twoStepSet = 0;
-          break;
-        }
-        if (downButton.buttonClicked) {
-          stateFSM = FSM_ALARM;
-          alarmClockData.twoStepSet = 0;
-          break;
-        }
         break;
         
       case FSM_TIMER:
         displayTimer();
-        if (topButton.buttonClicked || upButton.buttonClicked) {
-          stateFSM = FSM_HOME;
-          break;
-        }
-        
-        if (downButton.buttonClicked) {
-          alarmClockData.timerOnOff = !alarmClockData.timerOnOff;
-        }
-        
-        if (downButton.buttonHolded) {
-          stateFSM = FSM_SETTIMER;
-          break;
-        }
+        goFromTimer();
+
         break;
         
       case FSM_SETTIMER:
-        rotaryUpdateTimer();
-        displaySetTimer();
-
-        if (upButton.buttonClicked) {
-          if (alarmClockData.twoStepSet == 1) {
-            stateFSM = FSM_TIMER;
-            alarmClockData.twoStepSet = 0;
-            break;  
-          };
-          alarmClockData.twoStepSet += 1;
+      
+        if (rotaryInitCounter) {
+          if (alarmClockData.twoStepSet == 0) {
+            rotaryCounter = alarmClockData.timerMinutes;
+          } else {
+            rotaryCounter = alarmClockData.timerSeconds;
+          }
+          rotaryInitCounter = false;
         }
         
-        if (topButton.buttonClicked) {
-          stateFSM = FSM_HOME;
-          alarmClockData.twoStepSet = 0;
-          break;
-        }
-        if (downButton.buttonClicked) {
-          stateFSM = FSM_TIMER;
-          alarmClockData.twoStepSet = 0;
-          break;
-        }
+        rotaryUpdateTimer();
+        displaySetTimer();
+        goFromSetTimer();
+
         break;
     }
     
   if (prevStateFSM != stateFSM) {
     printState(stateFSM);
+    if (stateFSM == FSM_SETALARM or stateFSM == FSM_SETTIMER or stateFSM == FSM_SETTIME ) {
+      rotaryInitCounter = true;
+    }
     rotaryCounter = 0;
   }
 }
@@ -199,4 +133,124 @@ void printState(int state) {
       Serial.println("SET TIMER");
       break; 
   }      
+}
+
+void goFromHome(){
+    
+  if (upButton.buttonClicked) {
+    stateFSM = FSM_ALARM;
+    return;
+  }
+  if (downButton.buttonHolded) {
+    stateFSM = FSM_SETTIME;
+    return;
+  }
+}
+
+void goFromSetTime(){
+  if (upButton.buttonClicked) {
+    if (alarmClockData.twoStepSet == 1) {
+      stateFSM = FSM_HOME;
+      alarmClockData.twoStepSet = 0;
+      return;  
+    };
+    rotaryInitCounter = true;
+    alarmClockData.twoStepSet += 1;
+  }
+  
+  if (downButton.buttonHolded) {
+    alarmClockData.twoStepSet = 0;
+    stateFSM = FSM_HOME;
+    alarmClockData.hoursOffset = 0;
+    alarmClockData.minutesOffset = 0;
+  }
+  
+  if (topButton.buttonClicked || downButton.buttonClicked) {
+    alarmClockData.twoStepSet = 0;
+    stateFSM = FSM_HOME;
+    return;
+  }
+}
+
+void goFromAlarm(){
+  if (topButton.buttonClicked) {
+    stateFSM = FSM_HOME;
+    return;
+  }
+  if (upButton.buttonClicked) {
+    stateFSM = FSM_TIMER;
+    return;
+  }
+
+  if (downButton.buttonClicked) {
+    alarmClockData.alarmOnOff = !alarmClockData.alarmOnOff;
+  }
+  
+  if (downButton.buttonHolded) {
+    stateFSM = FSM_SETALARM;
+    return;
+  }
+}
+
+void goFromSetAlarm(){
+  if (upButton.buttonClicked) {
+    if (alarmClockData.twoStepSet == 1) {
+      stateFSM = FSM_ALARM;
+      alarmClockData.twoStepSet = 0;
+      return;  
+    };
+    rotaryInitCounter = true;
+    alarmClockData.twoStepSet += 1;
+  }
+  
+  
+  if (topButton.buttonClicked) {
+    stateFSM = FSM_HOME;
+    alarmClockData.twoStepSet = 0;
+    return;
+  }
+  if (downButton.buttonClicked) {
+    stateFSM = FSM_ALARM;
+    alarmClockData.twoStepSet = 0;
+    return;
+  }
+}
+
+void goFromTimer(){
+  if (topButton.buttonClicked || upButton.buttonClicked) {
+    stateFSM = FSM_HOME;
+    return;
+  }
+  
+  if (downButton.buttonClicked) {
+    alarmClockData.timerOnOff = !alarmClockData.timerOnOff;
+  }
+  
+  if (downButton.buttonHolded) {
+    stateFSM = FSM_SETTIMER;
+    return;
+  }
+}
+
+void goFromSetTimer(){
+  if (upButton.buttonClicked) {
+    if (alarmClockData.twoStepSet == 1) {
+      stateFSM = FSM_TIMER;
+      alarmClockData.twoStepSet = 0;
+      return;  
+    };
+    rotaryInitCounter = true;
+    alarmClockData.twoStepSet += 1;
+  }
+  
+  if (topButton.buttonClicked) {
+    stateFSM = FSM_HOME;
+    alarmClockData.twoStepSet = 0;
+    return;
+  }
+  if (downButton.buttonClicked) {
+    stateFSM = FSM_TIMER;
+    alarmClockData.twoStepSet = 0;
+    return;
+  }
 }

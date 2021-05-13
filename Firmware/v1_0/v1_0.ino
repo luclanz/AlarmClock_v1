@@ -45,10 +45,14 @@
     };
     typedef struct alarmClock_struct alarmClock_struct;
     alarmClock_struct alarmClockData;
+    
   // rotary encoder variables
     int rotaryCounter = 0;                            //Value of the knob
     int rotaryCurrentStateCLK, rotaryLastStateCLK;          //Value of CLK output
     String rotaryCurrentDir ="";                      //Direction
+    uint8_t rotaryOverflow[3] = {23, 59, 99};
+    uint8_t rotaryOverflowIndex = 0;
+    bool rotaryInitCounter = false;
 
 void setup() {
   Serial.begin(9600);

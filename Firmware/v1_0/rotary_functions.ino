@@ -23,11 +23,19 @@ void rotaryPolling(){
     // If the DT state is different than the CLK state then
     // the encoder is rotating CCW so decrement
     if (digitalRead(ROT_DT) != rotaryCurrentStateCLK) {
-      rotaryCounter --;
+      if (rotaryCounter == 0) {
+        rotaryCounter = rotaryOverflow[rotaryOverflowIndex];
+      } else {
+        rotaryCounter --;
+      }
       rotaryCurrentDir ="CCW";
     } else {
       // Encoder is rotating CW so increment
-      rotaryCounter ++;
+      if (rotaryCounter == rotaryOverflow[rotaryOverflowIndex]) {
+        rotaryCounter = 0;
+      } else {
+        rotaryCounter ++;
+      }
       rotaryCurrentDir ="CW";
     }
 
@@ -49,22 +57,37 @@ void rotaryUpdateTime() {
 }
 
 void rotaryUpdateAlarm() {
-
+  
   if (alarmClockData.twoStepSet == 0) {
+    
+    //limit at h23
+    rotaryOverflowIndex = 0;
     //update hours
-
-    // alarmClockData.alarmHours = rotaryCounter;
-
+    alarmClockData.alarmHours = rotaryCounter;
     return;
-  }
-
-  if (alarmClockData.twoStepSet == 1) {
+    
+  } else {
+    //limit at m59
+    rotaryOverflowIndex = 1;  
     //update minutes
-
-    return;
+    alarmClockData.alarmMinutes = rotaryCounter;
   }
 }
 
 void rotaryUpdateTimer() {
   
+  if (alarmClockData.twoStepSet == 0) {
+    
+    //limit at m99
+    rotaryOverflowIndex = 2;
+    //update hours
+    alarmClockData.timerMinutes = rotaryCounter;
+    return;
+    
+  } else {
+    //limit at s59
+    rotaryOverflowIndex = 1;  
+    //update minutes
+    alarmClockData.timerSeconds = rotaryCounter;
+  }
 }
