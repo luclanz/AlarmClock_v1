@@ -3,7 +3,7 @@
 I'm trying to create a portable clock with some spare modules and an arduino. Here are its basic specs:
 
   * Portable
-  * Long lasting 12V battery (6/12 months) with led indicator when low
+  * Long lasting 9V battery (6/12 months) with led indicator when low
   * Set alarms
   * Set timers
   * Small audio amplifier to reproduce "Daybreak" by M. Haggins as alarm
