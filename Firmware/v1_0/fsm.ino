@@ -39,8 +39,19 @@ void fsm(){
         
       case FSM_SETTIME:
 
-        //update counter
-      
+        //routine to inizialize the counter of the rotary when you want to change the time
+        if (rotaryInitCounter) {
+          if (alarmClockData.twoStepSet == 0) {
+            alarmClockData.hoursOffset = alarmClockData.hoursOffset + alarmClockData.now.hour();
+            alarmClockData.minutesOffset = alarmClockData.minutesOffset + alarmClockData.now.minute();
+            rotaryCounter = alarmClockData.hoursOffset;
+          } else {
+            rotaryCounter = alarmClockData.minutesOffset;
+          }
+          rotaryInitCounter = false;
+        }
+
+        
         rotaryUpdateTime();
         displaySetHome();
         goFromSetTime();
@@ -54,7 +65,8 @@ void fsm(){
         break;
         
       case FSM_SETALARM:
-
+      
+       //routine to inizialize the counter of the rotary when you want to change the time
         if (rotaryInitCounter) {
           if (alarmClockData.twoStepSet == 0) {
             rotaryCounter = alarmClockData.alarmHours;
@@ -77,7 +89,8 @@ void fsm(){
         break;
         
       case FSM_SETTIMER:
-      
+
+        //routine to inizialize the counter of the rotary when you want to change the time
         if (rotaryInitCounter) {
           if (alarmClockData.twoStepSet == 0) {
             rotaryCounter = alarmClockData.timerMinutes;
@@ -150,6 +163,9 @@ void goFromHome(){
 void goFromSetTime(){
   if (upButton.buttonClicked) {
     if (alarmClockData.twoStepSet == 1) {
+      
+      updateOffset();
+      
       stateFSM = FSM_HOME;
       alarmClockData.twoStepSet = 0;
       return;  
@@ -159,6 +175,7 @@ void goFromSetTime(){
   }
   
   if (downButton.buttonHolded) {
+      //reset any change to the time, back to the ds3231 value
     alarmClockData.twoStepSet = 0;
     stateFSM = FSM_HOME;
     alarmClockData.hoursOffset = 0;
@@ -166,7 +183,11 @@ void goFromSetTime(){
   }
   
   if (topButton.buttonClicked || downButton.buttonClicked) {
+      //here i'm escaping the settime via the two available ways (saving the changes)
     alarmClockData.twoStepSet = 0;
+
+    updateOffset();
+    
     stateFSM = FSM_HOME;
     return;
   }
@@ -253,4 +274,14 @@ void goFromSetTimer(){
     alarmClockData.twoStepSet = 0;
     return;
   }
+}
+
+void updateOffset() {
+
+    Serial.println("UPDATED OFFSET");
+
+    alarmClockData.hoursOffset = alarmClockData.hoursOffset - alarmClockData.now.hour();
+    alarmClockData.minutesOffset = alarmClockData.minutesOffset - alarmClockData.now.minute();
+
+
 }

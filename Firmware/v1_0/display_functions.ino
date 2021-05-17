@@ -40,8 +40,8 @@ void displaySetHome() {
   myGLCD.clrScr();
   myGLCD.setFont(BigNumbers);
                   //(num, x, y, lenght, spacer)
-  myGLCD.printNumI(alarmClockData.now.hour() + alarmClockData.hoursOffset, 13, 12, 2, '0');        //position of minutes / hours
-  myGLCD.printNumI(alarmClockData.now.minute() + alarmClockData.minutesOffset, 47, 12, 2, '0');
+  myGLCD.printNumI(alarmClockData.hoursOffset, 13, 12, 2, '0');        //position of minutes / hours
+  myGLCD.printNumI(alarmClockData.minutesOffset, 47, 12, 2, '0');
 
   myGLCD.drawCircle(44, 21, 1);               //circles that makes my ":"
   myGLCD.drawCircle(44, 27, 1);

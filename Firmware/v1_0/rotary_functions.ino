@@ -9,7 +9,9 @@ void rotarySetupRoutine(){
   rotaryLastStateCLK = digitalRead(ROT_CLK);
   // activate interrupt
   attachInterrupt(digitalPinToInterrupt(ROT_CLK), rotaryPolling, CHANGE);
+  //detachInterrupt(digitalPinToInterrupt(ROT_CLK));
   attachInterrupt(digitalPinToInterrupt(ROT_DT), rotaryPolling, CHANGE);
+  //detachInterrupt(digitalPinToInterrupt(ROT_DT));
   
 }
 void rotaryPolling(){
@@ -53,7 +55,20 @@ void rotaryPolling(){
 }
 
 void rotaryUpdateTime() {
-
+  if (alarmClockData.twoStepSet == 0) {
+    
+    //limit at h23
+    rotaryOverflowIndex = 0;
+    //update hours
+    alarmClockData.hoursOffset = rotaryCounter;
+    return;
+    
+  } else {
+    //limit at m59
+    rotaryOverflowIndex = 1;  
+    //update minutes
+    alarmClockData.minutesOffset = rotaryCounter;
+  }
 }
 
 void rotaryUpdateAlarm() {

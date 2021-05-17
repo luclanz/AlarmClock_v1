@@ -28,8 +28,8 @@
       boolean pulseInfo = false;            //two variables to make the display light up for a brief period
       uint32_t startTimePulse;
 
-      uint8_t hoursOffset = 0;
-      uint8_t minutesOffset = 0;
+      int hoursOffset = 0;
+      int minutesOffset = 0;
       
       uint8_t timerMinutes = 10;            //how can I set these in turn-on? 
       uint8_t timerSeconds = 0;
