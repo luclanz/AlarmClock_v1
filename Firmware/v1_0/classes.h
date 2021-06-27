@@ -16,9 +16,9 @@ class Button {
     byte state;
     
     uint32_t debounceMs;
-    static const uint32_t DEBOUNCE_ms = 50;
     
-    static const uint32_t HOLD_ms = 1500;
+    static const uint8_t DEBOUNCE_ms = 50;             //   static const uint32_t DEBOUNCE_ms = 50; old line
+    static const uint16_t HOLD_ms = 1500;               //   static const uint32_t HOLD_ms = 1500;
 
     uint32_t prevClickMs;
     uint32_t holdStartMs;
@@ -35,9 +35,9 @@ class Button {
 //------------------------------------------ SETUP BUTTON -------------------------------------------------------------
     void setup() {
       pinMode(pin, INPUT_PULLUP);
-      Serial.print("Button ");
+      Serial.print(F("Button "));
       Serial.print(name);
-      Serial.println(" set up.");
+      Serial.println(F(" set up."));
 
       state = digitalRead(pin);
       debounceMs = millis();   

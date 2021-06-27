@@ -22,13 +22,13 @@
   // ROTARY ENCODER
     #define ROT_CLK 2
     #define ROT_DT 3
-  // SD MODULE      CARE, THIS STILL GOES WITH 5V, NEED TO ORDER A DIFFERENT MODULE!
-//    #define SD_CS 4
-//    #define SD_SCK 13
-//    #define SD_MOSI 11
-//    #define SD_MISO 12
-//  // LM386
-//    #define LM_IN 9
+  // SD MODULE      CARE, THIS GOES WITH 5V!!!
+    #define SD_CS 4
+    #define SD_SCK 13
+    #define SD_MOSI 11
+    #define SD_MISO 12
+  // LM386
+    #define LM_IN 9
 
 //CONSTANTS---------------------------------------------------------------------------------
   // internal pulse

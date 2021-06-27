@@ -8,6 +8,7 @@ void fsm(){
     topButton.poll();
     upButton.poll();
     downButton.poll();
+    
   //updating time
     alarmClockData.now = rtc.now(); 
 
@@ -34,7 +35,6 @@ void fsm(){
         
         displayHome();
         goFromHome();
-        
         break;
         
       case FSM_SETTIME:
@@ -51,17 +51,16 @@ void fsm(){
           rotaryInitCounter = false;
         }
 
-        
         rotaryUpdateTime();
+        
         displaySetHome();
         goFromSetTime();
-  
         break;
         
       case FSM_ALARM:
+      
         displayAlarm();
         goFromAlarm();
-
         break;
         
       case FSM_SETALARM:
@@ -77,15 +76,15 @@ void fsm(){
         }
       
         rotaryUpdateAlarm();
+        
         displaySetAlarm();
         goFromSetAlarm();
-
         break;
         
       case FSM_TIMER:
+      
         displayTimer();
         goFromTimer();
-
         break;
         
       case FSM_SETTIMER:
@@ -101,49 +100,50 @@ void fsm(){
         }
         
         rotaryUpdateTimer();
+        
         displaySetTimer();
         goFromSetTimer();
-
         break;
     }
-    
-  if (prevStateFSM != stateFSM) {
-    printState(stateFSM);
-    if (stateFSM == FSM_SETALARM or stateFSM == FSM_SETTIMER or stateFSM == FSM_SETTIME ) {
-      rotaryInitCounter = true;
+
+    //print state, update rotary
+    if (prevStateFSM != stateFSM) {
+      printState(stateFSM);
+      if (stateFSM == FSM_SETALARM or stateFSM == FSM_SETTIMER or stateFSM == FSM_SETTIME ) {
+        rotaryInitCounter = true;
+      }
+      rotaryCounter = 0;
     }
-    rotaryCounter = 0;
-  }
 }
 
 void printState(int state) {
   switch(state) {
     case 0:
-      Serial.println("IDLE");
+      Serial.println(F("IDLE"));
       break;
       
     case 1:
-      Serial.println("HOME");
+      Serial.println(F("HOME"));
       break;
       
     case 2:
-      Serial.println("SET TIME");
+      Serial.println(F("SET TIME"));
       break;
       
     case 3: 
-      Serial.println("ALARM");
+      Serial.println(F("ALARM"));
       break;
       
     case 4:
-      Serial.println("SET ALARM");
+      Serial.println(F("SET ALARM"));
       break;
       
     case 5:
-      Serial.println("TIMER");
+      Serial.println(F("TIMER"));
       break;
       
     case 6: 
-      Serial.println("SET TIMER");
+      Serial.println(F("SET TIMER"));
       break; 
   }      
 }

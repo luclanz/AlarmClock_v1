@@ -5,13 +5,15 @@ void rotarySetupRoutine(){
   // Set encoder pins as inputs
   pinMode(ROT_CLK,INPUT);
   pinMode(ROT_DT,INPUT);
+  
   // Read the initial state of CLK
   rotaryLastStateCLK = digitalRead(ROT_CLK);
+  
   // activate interrupt
   attachInterrupt(digitalPinToInterrupt(ROT_CLK), rotaryPolling, CHANGE);
-  //detachInterrupt(digitalPinToInterrupt(ROT_CLK));
+      //detachInterrupt(digitalPinToInterrupt(ROT_CLK));
   attachInterrupt(digitalPinToInterrupt(ROT_DT), rotaryPolling, CHANGE);
-  //detachInterrupt(digitalPinToInterrupt(ROT_DT));
+      //detachInterrupt(digitalPinToInterrupt(ROT_DT));
   
 }
 void rotaryPolling(){
@@ -41,9 +43,9 @@ void rotaryPolling(){
       rotaryCurrentDir ="CW";
     }
 
-    Serial.print("Direction: ");
+    Serial.print(F("Direction: "));
     Serial.print(rotaryCurrentDir);
-    Serial.print(" | Counter: ");
+    Serial.print(F(" | Counter: "));
     Serial.println(rotaryCounter);
   }
 

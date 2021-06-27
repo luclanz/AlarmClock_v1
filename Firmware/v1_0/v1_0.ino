@@ -1,13 +1,16 @@
 //LIBs --------------------------------------------------------------------------------
   #include "RTClib.h"
   #include "LCD5110_Graph.h"
+  #include "SD.h"
+  #include "TMRpcm.h"
+  #include "SPI.h"
 //HEADERs -----------------------------------------------------------------------------
   #include "classes.h"
   #include "config.h"
 //Declaration ------------------------------------------------------------------------
   //FSM  
-    int stateFSM = 0;
-    int prevStateFSM = 0;
+    uint8_t stateFSM = 0;
+    uint8_t prevStateFSM = 0;
   //buttons
     Button topButton("TOP", BT_TOP);
     Button upButton("UP", BT_UP);
@@ -28,8 +31,8 @@
       boolean pulseInfo = false;            //two variables to make the display light up for a brief period
       uint32_t startTimePulse;
 
-      int hoursOffset = 0;
-      int minutesOffset = 0;
+      uint8_t hoursOffset = 0;
+      uint8_t minutesOffset = 0;
       
       uint8_t timerMinutes = 10;            //how can I set these in turn-on? 
       uint8_t timerSeconds = 0;
@@ -47,12 +50,15 @@
     alarmClock_struct alarmClockData;
     
   // rotary encoder variables
-    int rotaryCounter = 0;                            //Value of the knob
-    int rotaryCurrentStateCLK, rotaryLastStateCLK;          //Value of CLK output
-    String rotaryCurrentDir ="";                      //Direction
+    uint8_t rotaryCounter = 0;                              //Value of the knob
+    uint8_t rotaryCurrentStateCLK, rotaryLastStateCLK;      //Value of CLK output
+    String rotaryCurrentDir ="";                            //Direction
     uint8_t rotaryOverflow[3] = {23, 59, 99};
     uint8_t rotaryOverflowIndex = 0;
     bool rotaryInitCounter = false;
+
+  // SD and Speaker variables
+    TMRpcm tmrpcm;
 
 void setup() {
   Serial.begin(9600);
@@ -69,6 +75,12 @@ void setup() {
       myGLCD.InitLCD(60);
     //rotary enc
       rotarySetupRoutine();
+    //SD
+      tmrpcm.speakerPin = LM_IN;
+      if (!SD.begin(SD_CS)) {
+        Serial.println(F("SD fail"));
+        return;
+      }
 }
 
 void loop() {
@@ -83,22 +95,22 @@ void loop() {
 void rtcSetTimerInterrupt (int secondToTimer) {
 
   if(!rtc.setAlarm1(rtc.now() + TimeSpan(secondToTimer), DS3231_A1_Second)) {
-      Serial.println("Error, alarm wasn't set!");
+      Serial.println(F("Error, alarm wasn't set!"));
   }else {
-      Serial.print("Alarm will happen in ");  
+      Serial.print(F("Alarm will happen in "));  
       Serial.print(secondToTimer);
-      Serial.println(" Seconds");
+      Serial.println(F(" Seconds"));
   }
 
 }
 void onAlarm() {
-  Serial.println("Alarm OCCURED!");
+  Serial.println(F("Alarm OCCURED!"));
 }
 void rtcSetupRoutine() {
 
     // initializing the rtc
     if(!rtc.begin()) {
-        Serial.println("Couldn't find RTC!");
+        Serial.println(F("Couldn't find RTC!"));
         Serial.flush();
         abort();
     }
