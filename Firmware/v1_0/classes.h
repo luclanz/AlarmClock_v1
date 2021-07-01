@@ -35,9 +35,9 @@ class Button {
 //------------------------------------------ SETUP BUTTON -------------------------------------------------------------
     void setup() {
       pinMode(pin, INPUT_PULLUP);
-      Serial.print(F("Button "));
-      Serial.print(name);
-      Serial.println(F(" set up."));
+//      Serial.print(F("Button "));
+//      Serial.print(name);
+//      Serial.println(F(" set up."));
 
       state = digitalRead(pin);
       debounceMs = millis();   

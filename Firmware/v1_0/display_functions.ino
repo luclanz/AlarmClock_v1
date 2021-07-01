@@ -17,11 +17,11 @@ void displayHome () {
     String monthDisplay = monthsOfTheYear[alarmClockData.now.month()];
 
     if (alarmClockData.timerOnOff) {
-      myGLCD.print("Timer", 50, 4);
+      myGLCD.print(F("Timer"), 50, 4);
     }
     
     if (alarmClockData.alarmOnOff) {
-      myGLCD.print("Alarm", 15, 4);
+      myGLCD.print(F("Alarm"), 15, 4);
     }
     
     myGLCD.print(weekDisplay + " " + numberDisplay + " " + monthDisplay, 28, 41);
@@ -48,13 +48,13 @@ void displaySetHome() {
 
   myGLCD.setFont(TinyFont);
 
-  myGLCD.print("<--", 0, 33);
-  myGLCD.print("res", 0, 40);
+  myGLCD.print(F("<--"), 0, 33);
+  myGLCD.print(F("res"), 0, 40);
   myGLCD.drawLine(0, 46, 3, 46);
   myGLCD.drawLine(4, 46, 6, 46);
   myGLCD.drawLine(7, 46, 10, 46);
   
-  myGLCD.print("okay", 0, 5);
+  myGLCD.print(F("okay"), 0, 5);
 
   if (alarmClockData.twoStepSet == 0) {
       //hour block
@@ -83,8 +83,8 @@ void displaySetAlarm() {
 
   myGLCD.setFont(TinyFont);
 
-  myGLCD.print("back", 0, 37);
-  myGLCD.print("okay", 0, 5);
+  myGLCD.print(F("back"), 0, 37);
+  myGLCD.print(F("okay"), 0, 5);
 
   if (alarmClockData.twoStepSet == 0) {
       //hour block
@@ -111,8 +111,8 @@ void displaySetTimer() {
 
   myGLCD.setFont(TinyFont);
 
-  myGLCD.print("back", 0, 37);
-  myGLCD.print("okay", 0, 5);
+  myGLCD.print(F("back"), 0, 37);
+  myGLCD.print(F("okay"), 0, 5);
 
   if (alarmClockData.twoStepSet == 0) {
       //min block
@@ -140,19 +140,19 @@ void displayTimer () {
   myGLCD.setFont(TinyFont);
 
   if (alarmClockData.timerOnOff) {
-    myGLCD.print("Timer: ON", 25, 4);
+    myGLCD.print(F("Timer: ON"), 25, 4);
   } else {
-    myGLCD.print("Timer: PAUSE", 25, 4);  
+    myGLCD.print(F("Timer: PAUSE"), 25, 4);  
   }
  
-  myGLCD.print("(m)", 23, 39);
-  myGLCD.print("(s)", 57, 39);
-  myGLCD.print("I/0", 0, 33);
-  myGLCD.print("set", 0, 40);
+  myGLCD.print(F("(m)"), 23, 39);
+  myGLCD.print(F("(s)"), 57, 39);
+  myGLCD.print(F("I/0"), 0, 33);
+  myGLCD.print(F("set"), 0, 40);
   myGLCD.drawLine(0, 46, 3, 46);
   myGLCD.drawLine(4, 46, 6, 46);
   myGLCD.drawLine(7, 46, 10, 46);
-  myGLCD.print("cyc", 0, 5);
+  myGLCD.print(F("cyc"), 0, 5);
   myGLCD.update();
 }
 
@@ -169,18 +169,18 @@ void displayAlarm () {
   myGLCD.setFont(TinyFont);
 
   if (alarmClockData.alarmOnOff) {
-    myGLCD.print("Alarm: ON", 25, 4);
+    myGLCD.print(F("Alarm: ON"), 25, 4);
   } else {
-    myGLCD.print("Alarm: OFF", 25, 4);  
+    myGLCD.print(F("Alarm: OFF"), 25, 4);  
   }
 
-  myGLCD.print("(h)", 23, 39);
-  myGLCD.print("(m)", 57, 39);
-  myGLCD.print("tog", 0, 33);
-  myGLCD.print("set", 0, 40);
+  myGLCD.print(F("(h)"), 23, 39);
+  myGLCD.print(F("(m)"), 57, 39);
+  myGLCD.print(F("tog"), 0, 33);
+  myGLCD.print(F("set"), 0, 40);
   myGLCD.drawLine(0, 46, 3, 46);
   myGLCD.drawLine(4, 46, 6, 46);
   myGLCD.drawLine(7, 46, 10, 46); 
-  myGLCD.print("cyc", 0, 5);
+  myGLCD.print(F("cyc"), 0, 5);
   myGLCD.update();
 }

@@ -278,7 +278,7 @@ void goFromSetTimer(){
 
 void updateOffset() {
 
-    Serial.println("UPDATED OFFSET");
+    Serial.println(F("UPDATED OFFSET"));
 
     alarmClockData.hoursOffset = alarmClockData.hoursOffset - alarmClockData.now.hour();
     alarmClockData.minutesOffset = alarmClockData.minutesOffset - alarmClockData.now.minute();

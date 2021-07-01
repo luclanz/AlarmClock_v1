@@ -32,7 +32,7 @@ void rotaryPolling(){
       } else {
         rotaryCounter --;
       }
-      rotaryCurrentDir ="CCW";
+      rotaryCurrentDir = F("CCW");
     } else {
       // Encoder is rotating CW so increment
       if (rotaryCounter == rotaryOverflow[rotaryOverflowIndex]) {
@@ -40,7 +40,7 @@ void rotaryPolling(){
       } else {
         rotaryCounter ++;
       }
-      rotaryCurrentDir ="CW";
+      rotaryCurrentDir = F("CW");
     }
 
     Serial.print(F("Direction: "));

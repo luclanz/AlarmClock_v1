@@ -14,7 +14,7 @@
 //    #define RTC_SDA A4
   // LCD MODULE
     #define LCD_CLK A2      //10k ohm level shifter
-    #define LCD_DIN A3       //10k ohm level shifter
+    #define LCD_DIN A3      //10k ohm level shifter
     #define LCD_DC 8        //10k ohm level shifter
     #define LCD_CE A1       //220 ohm level shifter
     #define LCD_RST A0      //10k ohm level shifter
