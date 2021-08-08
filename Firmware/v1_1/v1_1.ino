@@ -82,7 +82,7 @@ void setup() {
       alarmData.alarmOnOff = 0;
       alarmData.twoStepSet = 0;  
 
-  Serial.println(sizeof(alarmData));
+  //Serial.println(sizeof(alarmData));
 
 }
 
