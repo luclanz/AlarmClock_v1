@@ -9,6 +9,9 @@
     #define BT_UP 6
     #define BT_DOWN 5
 
+  // INTERRUPT FOR RTC
+    #define RTC_INTERRUPT_PIN 2
+
 
 //CONSTANTS---------------------------------------------------------------------------------
   // internal pulse

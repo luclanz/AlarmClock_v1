@@ -1,14 +1,5 @@
-
 void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
 {
-
-    // initializing the rtc, if pins SDA and SCL are not connected to the I2C port, the program will stop
-    if(!rtc.begin()) {
-        Serial.println(F("Couldn't find RTC!"));
-        Serial.flush();
-        abort();
-    }
-    
     if(rtc.lostPower()) {
         // if 1 it means the RTC lost track of time, first member: const DateTime, secondo member: dt
         rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
@@ -30,8 +21,7 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
     // now the SQW pin will stay up untill an alarm occurs
     rtc.writeSqwPinMode(DS3231_OFF);
     
-    // turn off alarm 2 (in case it isn't off already)
-    // again, this isn't done at reboot, so a previously set alarm could easily go overlooked
+    // turn off alarms
     rtc.disableAlarm(1);
     rtc.disableAlarm(2);
 }
@@ -44,9 +34,9 @@ void rtc_set_timer (int sec_to_alarm) //int: second of the timer
             rtc.now() + TimeSpan(0,0,0,sec_to_alarm),     //with this it will set a timespan of (dd, hh, mm, ss).
             DS3231_A1_Hour                                // this mode triggers the alarm when the seconds match. See Doxygen for other options
     )) {
-        Serial.println("Error, alarm wasn't set!");
+        Serial.println(F("Error, alarm wasn't set!"));
     }else {
-        Serial.print("Alarm1 (timer_related) will happen in ");
+        Serial.print(F("Alarm1 (timer_related) will happen in "));
         Serial.println(sec_to_alarm);  
     }
 }
@@ -57,13 +47,13 @@ void rtc_set_alarm (int delta_h, int delta_m)
             rtc.now() + TimeSpan(0, delta_h, delta_m, 0),     //with this it will set a timespan of (dd, hh, mm, ss).
             DS3231_A2_Hour                              // this mode triggers the alarm when the seconds match. See Doxygen for other options
     )) {
-        Serial.println("Error, alarm wasn't set!");
+        Serial.println(F("Error, alarm wasn't set!"));
     }else {
-        Serial.print("Alarm2 (alarm_related) will happen in ");
+        Serial.print(F("Alarm2 (alarm_related) will happen in "));
         Serial.print(delta_h); 
-        Serial.print(" hours and ");
+        Serial.print(F(" hours and "));
         Serial.print(delta_m); 
-        Serial.println(" minutes");
+        Serial.println(F(" minutes"));
     }
 }
 
@@ -86,6 +76,12 @@ int rtc_hours_to_alarm (int h, int h_alarm, bool carrier) //first: actual time, 
 }
 
 void rtc_onAlarm() {
-    Serial.print("Alarm occured!");
+    Serial.print(F("Alarm occured!"));
     //this must be really small and quick
+    
+    /*
+
+    TODO
+
+    */
 }

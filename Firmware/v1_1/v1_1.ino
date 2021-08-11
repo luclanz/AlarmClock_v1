@@ -1,12 +1,12 @@
 //Libraries
-  #include "LCD5110_Graph.h"
+  #include "RTClib.h"
 
 
 //Files
   #include "classes.h"
   #include "config.h"
 
-//Declarations
+//Declarations----------------------------------------------------------------------------------------------------------------------
 
   //Button Variables
     Button topButton(BT_TOP);
@@ -40,19 +40,16 @@
         uint8_t twoStepSet :2;
 
       //TODO
-      //DateTime now;                         //this variable will contain every data related to the time (updated at the beginning of the fsm)
+      //DateTime now;                         //WE MIGHT NOT NEED THIS
     };
     
     typedef struct alarmClock_struct alarmClock_struct;
     alarmClock_struct alarmData;
-    
-  //5110LCD
-    LCD5110 myGLCD(LCD_CLK, LCD_DIN, LCD_DC, LCD_RST, LCD_CE);
-    extern uint8_t SmallFont[];                   // uint8_t -> byte
-    extern uint8_t TinyFont[];
-    extern uint8_t MediumNumbers[];
-    extern uint8_t BigNumbers[];
 
+  //RTC
+    RTC_DS3231 rtc;
+
+//----------------------------------------------------------------------------------------------------------------------------------
 
 void setup() {
 
@@ -80,9 +77,10 @@ void setup() {
       alarmData.alarmHours = 7;
       alarmData.alarmMinutes = 0;
       alarmData.alarmOnOff = 0;
-      alarmData.twoStepSet = 0;  
+      alarmData.twoStepSet = 0; 
 
-  //Serial.println(sizeof(alarmData));
+    //RTC
+      rtc_setup(RTC_INTERRUPT_PIN);
 
 }
 
