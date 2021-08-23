@@ -1,5 +1,10 @@
 //Libraries
   #include "RTClib.h"
+  #include <U8x8lib.h>
+  
+  #ifdef U8X8_HAVE_HW_SPI
+    #include <SPI.h>
+  #endif
 
 
 //Files
@@ -49,6 +54,9 @@
   //RTC
     RTC_DS3231 rtc;
 
+  //Display
+    U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST);
+
 //----------------------------------------------------------------------------------------------------------------------------------
 
 void setup() {
@@ -80,7 +88,9 @@ void setup() {
       alarmData.twoStepSet = 0; 
 
     //RTC
-      rtc_setup(RTC_INTERRUPT_PIN);
+      rtc_setup(RTC_INTERRUPT_PIN);   //WHY THIS loops forever
+    //LCD
+      display_setup();
 
 }
 
@@ -94,6 +104,14 @@ void loop() {
   //update state  
     alarmData.prevStateFSM = alarmData.stateFSM;
 
+  //light pulse
+//    if (alarmData.pulseInfo) {
+//      if ((millis() & 0x0000FFFF) > (alarmData.startTimePulse + TIMEDELAY)) {
+//        digitalWrite(LCD_LIGHT, HIGH);
+//        alarmData.pulseInfo = false;
+//      }
+//    }
+
   //fsm switch engine
     switch(alarmData.stateFSM) {
       
@@ -103,36 +121,43 @@ void loop() {
         break;
     
       case FSM_HOME:
-        
+
+        display_home();
         goFromHome();
         break;
     
       case FSM_SETTIME:
-    
+      
+        display_setTime();
         goFromSetTime();
         break;
     
       case FSM_ALARM:
-    
+
+        display_alarm();
         goFromAlarm();
         break;
     
       case FSM_SETALARM:
 
+        display_setAlarm();
         goFromSetAlarm();
         break;
     
       case FSM_TIMER:
     
+        display_timer();
         goFromTimer();
         break;
     
       case FSM_SETTIMER:
-    
+
+        display_setTimer();
         goFromSetTimer();
         break;
     } 
-       
+
+    
     //print state
       if (alarmData.prevStateFSM != alarmData.stateFSM) {
         printState(alarmData.stateFSM);

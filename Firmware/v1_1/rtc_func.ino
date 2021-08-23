@@ -1,5 +1,12 @@
 void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
 {
+  
+    if(!rtc.begin()) {
+        Serial.println(F("Couldn't find RTC!"));
+        Serial.flush();
+        abort();
+    }
+
     if(rtc.lostPower()) {
         // if 1 it means the RTC lost track of time, first member: const DateTime, secondo member: dt
         rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
