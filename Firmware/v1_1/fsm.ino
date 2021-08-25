@@ -1,7 +1,7 @@
 //every auxiliary functions for the fsm machine
 
 void goFromHome(){   
-  
+
   if (upButton.buttonClicked) {
     alarmData.stateFSM = FSM_ALARM;
     return;
@@ -20,6 +20,14 @@ void goFromSetTime(){
     alarmData.stateFSM = FSM_HOME;
     return;  
   };
+  
+  if (downButton.buttonClicked) {
+    alarmData.stateFSM = FSM_HOME;
+
+    //todo: two step handler
+    
+    return;
+  }
   
 }
 
@@ -48,6 +56,14 @@ void goFromSetAlarm(){
     alarmData.stateFSM = FSM_HOME;
     return;
   }
+
+  if (downButton.buttonClicked) {
+    alarmData.stateFSM = FSM_ALARM;
+
+    //todo: two step handler
+
+    return;
+  }
   
 }
 
@@ -69,6 +85,14 @@ void goFromSetTimer(){
   
   if (topButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
+    return;
+  }
+
+  if (downButton.buttonClicked) {
+    alarmData.stateFSM = FSM_TIMER;
+
+    //todo: two step handler
+    
     return;
   }
   

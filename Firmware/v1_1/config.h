@@ -16,6 +16,7 @@
 //CONSTANTS---------------------------------------------------------------------------------
   // internal pulse
     #define TIMEDELAY 2000
+    #define PULSE 400
   // FSM
     #define FSM_RST 0
     #define FSM_HOME 1
