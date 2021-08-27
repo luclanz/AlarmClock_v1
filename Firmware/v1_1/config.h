@@ -11,6 +11,18 @@
 
   // INTERRUPT FOR RTC
     #define RTC_INTERRUPT_PIN 2
+    
+  // LCD MODULE
+    #define LCD_RST A0      //10k ohm level shifter
+    #define LCD_CE A1       //220 ohm level shifter   
+    #define LCD_DC 8        //10k ohm level shifter
+    #define LCD_DIN A3      //10k ohm level shifter 
+    #define LCD_CLK A2      //10k ohm level shifter
+    #define LCD_LIGHT 10    //330 ohm level shifter
+
+  // ROTARY ENCODER
+    #define ROT_CLK 2
+    #define ROT_DT 3
 
 
 //CONSTANTS---------------------------------------------------------------------------------
@@ -25,14 +37,5 @@
     #define FSM_SETALARM 4
     #define FSM_TIMER 5
     #define FSM_SETTIMER 6
-  // LCD MODULE
-    #define LCD_RST A0      //10k ohm level shifter
-    #define LCD_CE A1       //220 ohm level shifter   
-    #define LCD_DC 8        //10k ohm level shifter
-    #define LCD_DIN A3      //10k ohm level shifter 
-    #define LCD_CLK A2      //10k ohm level shifter
-    #define LCD_LIGHT 10    //330 ohm level shifter
-
-
 
 #endif

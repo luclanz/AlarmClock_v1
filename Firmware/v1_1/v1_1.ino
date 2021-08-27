@@ -27,6 +27,7 @@
 
       //For setting time (UX)
         boolean pulsing :1;
+        boolean startPulsing :1;
         uint32_t pulsingTime;
 
       //For lighting the display
@@ -83,6 +84,7 @@ void setup() {
       alarmData.stateFSM = 0;
       alarmData.prevStateFSM = 0;
       alarmData.pulsing = 0;
+      alarmData.startPulsing = 0;
       alarmData.pulsingTime = millis();
       alarmData.pulseInfo = 0;      
       alarmData.startTimePulse = millis();
@@ -97,7 +99,7 @@ void setup() {
       alarmData.twoStepSet = 0; 
 
     //RTC
-      rtc_setup(RTC_INTERRUPT_PIN);
+      //rtc_setup(RTC_INTERRUPT_PIN);                   //this is deactivated for the time being, how do i handle 3 interrupt in my alarm?
     //LCD
       display_setup();
       pinMode(LCD_LIGHT, OUTPUT);
@@ -113,10 +115,12 @@ void loop() {
     alarmData.prevStateFSM = alarmData.stateFSM;
 
   //pulsing:
-    if (millis() > alarmData.pulsingTime + PULSE) {
-      alarmData.pulsingTime = millis();
-      alarmData.pulsing = !alarmData.pulsing;
-      lcd.clear();
+    if (alarmData.startPulsing) {
+      if (millis() > alarmData.pulsingTime + PULSE) {
+        alarmData.pulsingTime = millis();
+        alarmData.pulsing = !alarmData.pulsing;
+        lcd.clear();
+      }
     }
     
   //Polling
@@ -190,5 +194,13 @@ void loop() {
       if (alarmData.prevStateFSM != alarmData.stateFSM) {
         printState(alarmData.stateFSM);
         lcd.clear();
+
+        if (alarmData.stateFSM == FSM_SETTIMER or alarmData.stateFSM == FSM_SETTIME or alarmData.stateFSM == FSM_SETALARM) {
+          alarmData.startPulsing = 1;
+        } else {
+          alarmData.startPulsing = 0;
+        }
+        
+        alarmData.twoStepSet = 0;
       }
 }

@@ -22,16 +22,27 @@ void goFromSetTime(){
   };
   
   if (downButton.buttonClicked) {
-    alarmData.stateFSM = FSM_HOME;
-
-    //todo: two step handler
-    
+    alarmData.stateFSM = FSM_HOME;  
     return;
   }
+  
+  if (upButton.buttonClicked) {
+
+    alarmData.twoStepSet = alarmData.twoStepSet + 1;
+
+    if (alarmData.twoStepSet == 2) alarmData.stateFSM = FSM_HOME;
+    
+    return;  
+  };
   
 }
 
 void goFromAlarm(){
+
+  //toggle alarm
+  if (downButton.buttonClicked) {
+    alarmData.alarmOnOff = !alarmData.alarmOnOff;
+  }
 
   if (topButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
@@ -59,15 +70,26 @@ void goFromSetAlarm(){
 
   if (downButton.buttonClicked) {
     alarmData.stateFSM = FSM_ALARM;
-
-    //todo: two step handler
-
     return;
   }
+  
+  if (upButton.buttonClicked) {
+
+    alarmData.twoStepSet = alarmData.twoStepSet + 1;
+
+    if (alarmData.twoStepSet == 2) alarmData.stateFSM = FSM_ALARM;
+    
+    return;  
+  };
   
 }
 
 void goFromTimer(){
+
+  //toggle timer
+  if (downButton.buttonClicked) {
+    alarmData.timerOnOff = !alarmData.timerOnOff;
+  }
   
   if (topButton.buttonClicked || upButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
@@ -89,12 +111,18 @@ void goFromSetTimer(){
   }
 
   if (downButton.buttonClicked) {
-    alarmData.stateFSM = FSM_TIMER;
-
-    //todo: two step handler
-    
+    alarmData.stateFSM = FSM_TIMER;  
     return;
   }
+
+  if (upButton.buttonClicked) {
+
+    alarmData.twoStepSet = alarmData.twoStepSet + 1;
+
+    if (alarmData.twoStepSet == 2) alarmData.stateFSM = FSM_ALARM;
+    
+    return;  
+  };
   
 }
 
