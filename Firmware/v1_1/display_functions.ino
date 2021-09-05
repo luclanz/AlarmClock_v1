@@ -1,3 +1,12 @@
+/*
+
+  Functions: 
+    
+    - display_X()
+
+*/
+
+
 void display_setup() 
 {
   lcd.begin();
@@ -32,9 +41,15 @@ void display_home()
 void display_setTime()
 {
 
-    //TODO: once the rotary encoder is implemented i need to display the correct time
+  //TODO: once the rotary encoder is implemented i need to display the correct time
+    
+  //upper and bottom text
+    lcd.setFont(u8x8_font_chroma48medium8_r);
 
-  
+    lcd.drawString(3,0, "Time");
+    lcd.drawString(4, 5, "SET");
+
+  //main text
     char time_string[5];
     lcd.setFont(u8x8_font_inr21_2x4_n);    
     if (alarmData.pulsing) {

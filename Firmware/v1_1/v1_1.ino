@@ -49,8 +49,17 @@
       //Value 0 to 2 to navigate the menu
         uint8_t twoStepSet :2;
 
-      //TODO
-      //DateTime now;                         //WE MIGHT NOT NEED THIS
+      //Rotary Encoder
+        uint8_t rotaryCounter :7;             //Value of the knob, MAX: 99, 7bits
+        uint8_t rotaryCurrentStateCLK :1;     //Value of CLK output: boolean
+        uint8_t rotaryLastStateCLK :1;  
+            
+        String rotaryCurrentDir ="";          //Direction           <-- OPTIONAL?
+        
+        uint8_t rotaryOverflow[3] = {23, 59, 99};
+        uint8_t rotaryOverflowIndex :2;
+        uint8_t rotaryInitCounter :1;
+        
     };
     
     typedef struct alarmClock_struct alarmClock_struct;
@@ -63,7 +72,7 @@
     char monthsOfTheYear [13][4] = {"dec", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
 
   //Display
-    U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST);
+    U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
 
 //----------------------------------------------------------------------------------------------------------------------------------
 
@@ -98,12 +107,21 @@ void setup() {
       alarmData.alarmOnOff = 0;
       alarmData.twoStepSet = 0; 
 
+      alarmData.rotaryCounter = 0;
+      alarmData.rotaryOverflowIndex = 0;
+      alarmData.rotaryInitCounter = 0;
+
     //RTC
-      //rtc_setup(RTC_INTERRUPT_PIN);                   //this is deactivated for the time being, how do i handle 3 interrupt in my alarm?
+      rtc_setup(RTC_INTERRUPT_PIN);                   //this is deactivated for the time being, how do i handle 3 interrupt in my alarm?
+      
     //LCD
       display_setup();
       pinMode(LCD_LIGHT, OUTPUT);
       digitalWrite(LCD_LIGHT, HIGH);
+
+    //ROTARY
+      rotarySetupRoutine();
+    
 
 }
 

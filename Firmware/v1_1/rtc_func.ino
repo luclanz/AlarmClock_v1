@@ -1,3 +1,18 @@
+/*
+
+  Functions:
+
+    - rtc_setup()                 <-- REMEMBER TO ACTIVATE THE INTERRUPT ONCE PROPER MANAGEMENT IS DONE
+    - rtc_set_timer()
+    - rtc_set_alarm()
+    - rtc_minutes_to_alarm()
+    - rtc_hours_to_alarm()
+    - rtc_onAlarm()               <-- TODO
+
+*/
+
+
+
 void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
 {
   
@@ -16,8 +31,16 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
     rtc.disable32K();
     
     // Making it so, that the alarm will trigger an interrupt
-    pinMode(interrupt, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
+
+
+    //TODO: INTERRUPT MANAGEMENT##########################################################################################################
+
+    
+//    pinMode(interrupt, INPUT_PULLUP);
+//    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
+
+
+    //####################################################################################################################################
     
     // set alarm 1, 2 flag to false (so alarm 1, 2 didn't happen so far)
     // if not done, this easily leads to problems, as both register aren't reset on reboot/recompile

@@ -1,4 +1,11 @@
-//every auxiliary functions for the fsm machine
+/*
+ 
+  Functions:
+  
+    - goFromX()
+    - printState()
+  
+*/
 
 void goFromHome(){   
 
@@ -11,10 +18,17 @@ void goFromHome(){
     alarmData.stateFSM = FSM_SETTIME;
     return;
   }
-  
+ 
 }
 
 void goFromSetTime(){
+
+  //reset any change to the time, back to the ds3231 value
+    if (downButton.buttonHolded) {
+      alarmData.stateFSM = FSM_HOME;
+      alarmData.hoursOffset = 0;
+      alarmData.minutesOffset = 0;
+    }
   
   if (topButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
@@ -34,6 +48,13 @@ void goFromSetTime(){
     
     return;  
   };
+
+  if (downButton.buttonHolded) {
+      //reset any change to the time, back to the ds3231 value
+    alarmData.stateFSM = FSM_HOME;
+    alarmData.hoursOffset = 0;
+    alarmData.minutesOffset = 0;
+  }
   
 }
 
@@ -42,6 +63,7 @@ void goFromAlarm(){
   //toggle alarm
   if (downButton.buttonClicked) {
     alarmData.alarmOnOff = !alarmData.alarmOnOff;
+    lcd.clear();
   }
 
   if (topButton.buttonClicked) {
@@ -89,6 +111,7 @@ void goFromTimer(){
   //toggle timer
   if (downButton.buttonClicked) {
     alarmData.timerOnOff = !alarmData.timerOnOff;
+    lcd.clear();
   }
   
   if (topButton.buttonClicked || upButton.buttonClicked) {
