@@ -4,6 +4,7 @@
   
     - goFromX()
     - printState()
+    - updateOffset()
   
 */
 
@@ -28,33 +29,31 @@ void goFromSetTime(){
       alarmData.stateFSM = FSM_HOME;
       alarmData.hoursOffset = 0;
       alarmData.minutesOffset = 0;
+      alarmData.twoStepSet = 0;
     }
   
-  if (topButton.buttonClicked) {
+  if (topButton.buttonClicked || downButton.buttonClicked) {
+    
+    alarmData.twoStepSet = 0;
+    updateOffset();
+    
     alarmData.stateFSM = FSM_HOME;
     return;  
   };
   
-  if (downButton.buttonClicked) {
-    alarmData.stateFSM = FSM_HOME;  
-    return;
-  }
   
   if (upButton.buttonClicked) {
-
-    alarmData.twoStepSet = alarmData.twoStepSet + 1;
-
-    if (alarmData.twoStepSet == 2) alarmData.stateFSM = FSM_HOME;
-    
-    return;  
+    if (alarmData.twoStepSet == 1) {
+      
+      updateOffset();
+      
+      alarmData.stateFSM = FSM_HOME;
+      alarmData.twoStepSet = 0;
+      return;  
+    };
+    alarmData.rotaryInitCounter = true;
+    alarmData.twoStepSet += 1;
   };
-
-  if (downButton.buttonHolded) {
-      //reset any change to the time, back to the ds3231 value
-    alarmData.stateFSM = FSM_HOME;
-    alarmData.hoursOffset = 0;
-    alarmData.minutesOffset = 0;
-  }
   
 }
 
@@ -87,11 +86,20 @@ void goFromSetAlarm(){
   
   if (topButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
+
+    
+
+        alarmData.twoStepSet = 0;
+
+    
     return;
   }
 
   if (downButton.buttonClicked) {
     alarmData.stateFSM = FSM_ALARM;
+
+alarmData.twoStepSet = 0;
+
     return;
   }
   
@@ -99,7 +107,10 @@ void goFromSetAlarm(){
 
     alarmData.twoStepSet = alarmData.twoStepSet + 1;
 
-    if (alarmData.twoStepSet == 2) alarmData.stateFSM = FSM_ALARM;
+    if (alarmData.twoStepSet == 2) {
+      alarmData.stateFSM = FSM_ALARM;
+      alarmData.twoStepSet = 0;
+    }
     
     return;  
   };
@@ -130,11 +141,17 @@ void goFromSetTimer(){
   
   if (topButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
+
+alarmData.twoStepSet = 0;
+    
     return;
   }
 
   if (downButton.buttonClicked) {
     alarmData.stateFSM = FSM_TIMER;  
+
+alarmData.twoStepSet = 0;
+    
     return;
   }
 
@@ -142,7 +159,12 @@ void goFromSetTimer(){
 
     alarmData.twoStepSet = alarmData.twoStepSet + 1;
 
-    if (alarmData.twoStepSet == 2) alarmData.stateFSM = FSM_ALARM;
+    if (alarmData.twoStepSet == 2) {
+
+      alarmData.stateFSM = FSM_ALARM;
+
+      alarmData.twoStepSet = 0;
+    }
     
     return;  
   };
@@ -180,4 +202,14 @@ void printState(int state) {
       Serial.println(F("SET TIMER"));
       break; 
   }      
+}
+
+void updateOffset() {
+
+    Serial.println(F("UPDATED OFFSET"));
+
+    alarmData.hoursOffset = alarmData.hoursOffset - rtc.now().hour();
+    alarmData.minutesOffset = alarmData.minutesOffset - rtc.now().minute();
+
+
 }

@@ -35,15 +35,15 @@
         uint32_t startTimePulse;
         
       //Offset to change time
-        uint8_t hoursOffset :4;               //12h max -> 4bits (0 to 15)
-        uint8_t minutesOffset :6;             //59m max -> 6bits (0 to 63)
+        uint8_t hoursOffset;              
+        uint8_t minutesOffset;             
 
       //Timer / Alam set variables
-        uint8_t timerMinutes;                 //up to 255minutes
-        uint8_t timerSeconds :6;              //59s max -> 6bits (0 to 63)  
+        uint8_t timerMinutes;                 
+        uint8_t timerSeconds;              
         boolean timerOnOff :1;                
-        uint8_t alarmHours :5;                //23h max -> 5bits (0 to 31)
-        uint8_t alarmMinutes :6;              //59m max -> 6bits (0 to 63) 
+        uint8_t alarmHours;                
+        uint8_t alarmMinutes;              
         uint8_t alarmOnOff :1;
 
       //Value 0 to 2 to navigate the menu
@@ -166,17 +166,42 @@ void loop() {
       case FSM_HOME:
 
         //print date when top button is pressed
-        if (topButton.buttonClicked) {
-          alarmData.pulseInfo = true;
-          digitalWrite(LCD_LIGHT, LOW); 
-          alarmData.startTimePulse = millis();  
-        }  
+          if (topButton.buttonClicked) {
+            alarmData.pulseInfo = true;
+            digitalWrite(LCD_LIGHT, LOW); 
+            alarmData.startTimePulse = millis();  
+          }  
 
         display_home();
         goFromHome();
         break;
     
       case FSM_SETTIME:
+
+        //routine to inizialize the counter of the rotary when you want to change the time
+          if (alarmData.rotaryInitCounter) {
+            if (alarmData.twoStepSet == 0) {
+              
+              //here is the first time we enter the setup -> we are tweaking the hours
+                alarmData.hoursOffset = alarmData.hoursOffset + rtc.now().hour();
+                alarmData.minutesOffset = alarmData.minutesOffset + rtc.now().minute();
+  
+              //this line is so that the rotary counts along the current time
+                alarmData.rotaryCounter = alarmData.hoursOffset;
+                
+            } else {
+              
+              //this line is so that the rotary counts along the current time
+                alarmData.rotaryCounter = alarmData.minutesOffset;
+            }
+  
+            //the rotary counter has been initialized so now back to false
+              alarmData.rotaryInitCounter = false;
+            
+          }
+
+        rotaryUpdateTime();
+
       
         display_setTime();
         goFromSetTime();
@@ -210,15 +235,23 @@ void loop() {
     
     //print state
       if (alarmData.prevStateFSM != alarmData.stateFSM) {
-        printState(alarmData.stateFSM);
-        lcd.clear();
 
-        if (alarmData.stateFSM == FSM_SETTIMER or alarmData.stateFSM == FSM_SETTIME or alarmData.stateFSM == FSM_SETALARM) {
-          alarmData.startPulsing = 1;
-        } else {
+        //print new state
+          printState(alarmData.stateFSM);
+          
+        //clear lcd
+          lcd.clear();
+          
+        //reset pulsing and twostep
           alarmData.startPulsing = 0;
-        }
+          alarmData.twoStepSet = 0;
         
-        alarmData.twoStepSet = 0;
+        // Activate ROTARY and PULSING when entering "time_setting" states
+          if (alarmData.stateFSM == FSM_SETTIMER or alarmData.stateFSM == FSM_SETTIME or alarmData.stateFSM == FSM_SETALARM) {
+            alarmData.rotaryInitCounter = true;
+            alarmData.startPulsing = 1;
+          }
+
+        alarmData.rotaryCounter = 0;
       }
 }

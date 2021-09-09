@@ -1,7 +1,8 @@
 /*
 
   Functions: 
-    
+
+    - display_setup()
     - display_X()
 
 */
@@ -18,7 +19,7 @@ void display_home()
   //print main time
     char time_string[10];
     lcd.setFont(u8x8_font_inr21_2x4_n);
-    sprintf(time_string, "%02d:%02d", rtc.now().hour(), rtc.now().minute());    
+    sprintf(time_string, "%02d:%02d", rtc.now().hour() + alarmData.hoursOffset, rtc.now().minute() + alarmData.minutesOffset);    
     lcd.drawString(0, 1, time_string); 
 
   //print extra info when display lights up
@@ -53,18 +54,18 @@ void display_setTime()
     char time_string[5];
     lcd.setFont(u8x8_font_inr21_2x4_n);    
     if (alarmData.pulsing) {
-        sprintf(time_string, "%02d:%02d", rtc.now().hour(), rtc.now().minute()); 
+        sprintf(time_string, "%02d:%02d", alarmData.hoursOffset, alarmData.minutesOffset); 
         lcd.drawString(0, 1, time_string);  
           
     } else {
       if (alarmData.twoStepSet) {
         //twoStepSet = 1:
-        sprintf(time_string, "%02d:", rtc.now().hour()); 
+        sprintf(time_string, "%02d:", alarmData.hoursOffset); 
         lcd.drawString(0, 1, time_string); 
    
       } else {
         //twoStepSet = 0:
-        sprintf(time_string, ":%02d", rtc.now().minute()); 
+        sprintf(time_string, ":%02d", alarmData.minutesOffset); 
         lcd.drawString(4, 1, time_string); 
       }
     }
