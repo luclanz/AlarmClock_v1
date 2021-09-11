@@ -159,7 +159,6 @@ void loop() {
     switch(alarmData.stateFSM) {
       
       case FSM_RST:
-        
         alarmData.stateFSM = FSM_HOME;
         break;
     
@@ -199,8 +198,7 @@ void loop() {
               alarmData.rotaryInitCounter = false;
             
           }
-
-        rotaryUpdateTime();
+          rotaryUpdateTime();
 
       
         display_setTime();
@@ -215,6 +213,17 @@ void loop() {
     
       case FSM_SETALARM:
 
+        //routine to inizialize the counter of the rotary when you want to change the time
+          if (alarmData.rotaryInitCounter) {
+            if (alarmData.twoStepSet == 0) {
+              alarmData.rotaryCounter = alarmData.alarmHours;
+            } else {
+              alarmData.rotaryCounter = alarmData.alarmMinutes;
+            }
+            alarmData.rotaryInitCounter = false;
+          }
+          rotaryUpdateAlarm();
+
         display_setAlarm();
         goFromSetAlarm();
         break;
@@ -226,6 +235,17 @@ void loop() {
         break;
     
       case FSM_SETTIMER:
+
+        //routine to inizialize the counter of the rotary when you want to change the time
+          if (alarmData.rotaryInitCounter) {
+            if (alarmData.twoStepSet == 0) {
+              alarmData.rotaryCounter = alarmData.timerMinutes;
+            } else {
+              alarmData.rotaryCounter = alarmData.timerSeconds;
+            }
+            alarmData.rotaryInitCounter = false;
+          }
+          rotaryUpdateTimer();
 
         display_setTimer();
         goFromSetTimer();
@@ -242,9 +262,8 @@ void loop() {
         //clear lcd
           lcd.clear();
           
-        //reset pulsing and twostep
+        //reset pulsing
           alarmData.startPulsing = 0;
-          alarmData.twoStepSet = 0;
         
         // Activate ROTARY and PULSING when entering "time_setting" states
           if (alarmData.stateFSM == FSM_SETTIMER or alarmData.stateFSM == FSM_SETTIME or alarmData.stateFSM == FSM_SETALARM) {

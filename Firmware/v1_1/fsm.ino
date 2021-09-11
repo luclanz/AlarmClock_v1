@@ -83,36 +83,40 @@ void goFromAlarm(){
 }
 
 void goFromSetAlarm(){
-  
+
+  //reset any change to the time, back to the ds3231 value
+    if (downButton.buttonHolded) {
+      alarmData.stateFSM = FSM_ALARM;
+      alarmData.alarmHours = 7;
+      alarmData.alarmMinutes = 0;
+      alarmData.alarmOnOff = 0;
+      alarmData.twoStepSet = 0;
+    }
+
   if (topButton.buttonClicked) {
+    
     alarmData.stateFSM = FSM_HOME;
-
-    
-
-        alarmData.twoStepSet = 0;
-
-    
+    alarmData.twoStepSet = 0;
     return;
   }
 
   if (downButton.buttonClicked) {
+    
     alarmData.stateFSM = FSM_ALARM;
-
-alarmData.twoStepSet = 0;
-
+    alarmData.twoStepSet = 0;
     return;
   }
   
   if (upButton.buttonClicked) {
 
-    alarmData.twoStepSet = alarmData.twoStepSet + 1;
-
-    if (alarmData.twoStepSet == 2) {
+    if (alarmData.twoStepSet == 1) {
       alarmData.stateFSM = FSM_ALARM;
       alarmData.twoStepSet = 0;
+      return;  
     }
     
-    return;  
+    alarmData.rotaryInitCounter = true;
+    alarmData.twoStepSet += 1; 
   };
   
 }
@@ -138,35 +142,37 @@ void goFromTimer(){
 }
 
 void goFromSetTimer(){
+
+  //reset any change to the time, back to the ds3231 value
+    if (downButton.buttonHolded) {
+      alarmData.stateFSM = FSM_TIMER;
+      alarmData.timerMinutes = 10;
+      alarmData.timerSeconds = 0;
+      alarmData.timerOnOff = 0;
+      alarmData.twoStepSet = 0;
+    }
   
   if (topButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
-
-alarmData.twoStepSet = 0;
-    
+    alarmData.twoStepSet = 0;
     return;
   }
 
   if (downButton.buttonClicked) {
     alarmData.stateFSM = FSM_TIMER;  
-
-alarmData.twoStepSet = 0;
-    
+    alarmData.twoStepSet = 0;
     return;
   }
 
   if (upButton.buttonClicked) {
 
-    alarmData.twoStepSet = alarmData.twoStepSet + 1;
-
-    if (alarmData.twoStepSet == 2) {
-
-      alarmData.stateFSM = FSM_ALARM;
-
+    if (alarmData.twoStepSet == 1) {
+      alarmData.stateFSM = FSM_TIMER;
       alarmData.twoStepSet = 0;
-    }
-    
-    return;  
+      return;  
+    };
+    alarmData.rotaryInitCounter = true;
+    alarmData.twoStepSet += 1; 
   };
   
 }

@@ -4,13 +4,19 @@
 
     - rotarySetupRoutine()                          * check when managing the interrupt
     - rotaryPolling()
-    - rotaryUpdateTime()
+    - rotaryUpdateTime()                            * those next three function may be called less frequently
     - rotaryUpdateAlarm()
     - rotaryUpdateTimer()
 
 */
 
-void rotarySetupRoutine(){
+void rotarySetupRoutine(){                          //FUNCTION TO CALL WHEN ENABLING THE ROTARY ENCODER
+
+  /*
+    TODO: 
+      - I may change this name into rotaryEnableRoutine if I plan on switching the interrupts during the process
+      - STILL TO BE FINISHED
+  */
   
   // Input pin setup
     pinMode(ROT_CLK,INPUT);
@@ -28,37 +34,50 @@ void rotarySetupRoutine(){
 }
 
 
-void rotaryPolling(){
-  // Read the current state of CLK
+void rotaryPolling(){                                 //FUNCTION TO CALL FOR POLLING: it updates the counter (+ or -) and considers overflow
+
+  /*
+    TODO: 
+      - I might consider to remove the direction variable, i can use a single bit instead of a string!!
+  */
+
+  
+  //Read the current state of CLK
     alarmData.rotaryCurrentStateCLK = digitalRead(ROT_CLK);
 
-  // If last and current state of CLK are different, then pulse occurred
-  // React to only 1 state change to avoid double count
+  // If last and current state of CLK are different, then pulse occurred (react to only 1 state change to avoid double count)
     if (alarmData.rotaryCurrentStateCLK != alarmData.rotaryLastStateCLK  && alarmData.rotaryCurrentStateCLK == 1){
 
-    // If the DT state is different than the CLK state then
-    // the encoder is rotating CCW so decrement
+
+    //here I'm also considering the overflow depending on the rotaryOverflowIndex
       if (digitalRead(ROT_DT) != alarmData.rotaryCurrentStateCLK) {
-        if (alarmData.rotaryCounter == 0) {
-          alarmData.rotaryCounter = alarmData.rotaryOverflow[alarmData.rotaryOverflowIndex];
-        } else {
-          alarmData.rotaryCounter --;
-        }
-        alarmData.rotaryCurrentDir = F("CCW");
+        
+        //CCW direction!
+        //I'm decreasing the value, if it is 0 I'll pick the overflow number (i.e: 0 - 1 = 59 w/ minutes or seconds)
+          if (alarmData.rotaryCounter == 0) {
+            alarmData.rotaryCounter = alarmData.rotaryOverflow[alarmData.rotaryOverflowIndex];
+          } else {
+            alarmData.rotaryCounter --;
+          }
+          alarmData.rotaryCurrentDir = F("CCW");
+        
       } else {
-        // Encoder is rotating CW so increment
-        if (alarmData.rotaryCounter == alarmData.rotaryOverflow[alarmData.rotaryOverflowIndex]) {
-          alarmData.rotaryCounter = 0;
-        } else {
-          alarmData.rotaryCounter ++;
-        }
-        alarmData.rotaryCurrentDir = F("CW");
+        
+        //CW diraction!
+        //I'm increasing the value, if it is 59 I'll go to 0 when considering minutes or seconds
+          if (alarmData.rotaryCounter == alarmData.rotaryOverflow[alarmData.rotaryOverflowIndex]) {
+            alarmData.rotaryCounter = 0;
+          } else {
+            alarmData.rotaryCounter ++;
+          }
+          alarmData.rotaryCurrentDir = F("CW");
       }
-  
-      Serial.print(F("Direction: "));
-      Serial.print(alarmData.rotaryCurrentDir);
-      Serial.print(F(" | Counter: "));
-      Serial.println(alarmData.rotaryCounter);
+
+      //print some info  
+        Serial.print(F("Direction: "));
+        Serial.print(alarmData.rotaryCurrentDir);
+        Serial.print(F(" | Counter: "));
+        Serial.println(alarmData.rotaryCounter);
   }
 
   // Remember last CLK state
@@ -71,19 +90,17 @@ void rotaryUpdateTime() {
     
     //limit at h23
       alarmData.rotaryOverflowIndex = 0;
-    
     //update hours
       alarmData.hoursOffset = alarmData.rotaryCounter;
-    
     return;
     
   } else {
     
     //limit at m59
-      alarmData.rotaryOverflowIndex = 1;  
-      
+      alarmData.rotaryOverflowIndex = 1;
     //update minutes
       alarmData.minutesOffset = alarmData.rotaryCounter;
+      
   }
 }
 
@@ -92,16 +109,18 @@ void rotaryUpdateAlarm() {
   if (alarmData.twoStepSet == 0) {
     
     //limit at h23
-    alarmData.rotaryOverflowIndex = 0;
+      alarmData.rotaryOverflowIndex = 0;
     //update hours
-    alarmData.alarmHours = alarmData.rotaryCounter;
+      alarmData.alarmHours = alarmData.rotaryCounter;
     return;
     
   } else {
+    
     //limit at m59
-    alarmData.rotaryOverflowIndex = 1;  
+      alarmData.rotaryOverflowIndex = 1;  
     //update minutes
-    alarmData.alarmMinutes = alarmData.rotaryCounter;
+      alarmData.alarmMinutes = alarmData.rotaryCounter;
+      
   }
 }
 
@@ -110,15 +129,17 @@ void rotaryUpdateTimer() {
   if (alarmData.twoStepSet == 0) {
     
     //limit at m99
-    alarmData.rotaryOverflowIndex = 2;
+      alarmData.rotaryOverflowIndex = 2;
     //update hours
-    alarmData.timerMinutes = alarmData.rotaryCounter;
+      alarmData.timerMinutes = alarmData.rotaryCounter;
     return;
     
   } else {
+    
     //limit at s59
-    alarmData.rotaryOverflowIndex = 1;  
+      alarmData.rotaryOverflowIndex = 1;  
     //update minutes
-    alarmData.timerSeconds = alarmData.rotaryCounter;
+      alarmData.timerSeconds = alarmData.rotaryCounter;
+      
   }
 }
