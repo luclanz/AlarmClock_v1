@@ -34,6 +34,7 @@ void rotarySetupRoutine(){                          //FUNCTION TO CALL WHEN ENAB
 }
 
 
+//ISR
 void rotaryPolling(){                                 //FUNCTION TO CALL FOR POLLING: it updates the counter (+ or -) and considers overflow
 
   /*
