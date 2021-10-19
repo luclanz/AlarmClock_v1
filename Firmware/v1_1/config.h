@@ -6,8 +6,8 @@
 //IOs ---------------------------------------------------------------------------------
   // PUSHBUTTON
     #define BT_TOP 7    //CONSTRAINT: pin is unsigned nibble -> range 0 to 15 
-    #define BT_UP 6
-    #define BT_DOWN 5
+    #define BT_UP 9
+    #define BT_DOWN 11
 
   // INTERRUPT FOR RTC
     #define RTC_INTERRUPT_PIN 2
@@ -21,14 +21,17 @@
     #define LCD_LIGHT 10    //330 ohm level shifter
 
   // ROTARY ENCODER
-    #define ROT_CLK 2
-    #define ROT_DT 3
+    #define ROT_CLK 6       //Those two pin are FIXED by the mask / PCINT setup (need to tweak bits if you want to change this)
+    #define ROT_DT 5
+
+  // SD
 
 
 //CONSTANTS---------------------------------------------------------------------------------
   // internal pulse
     #define TIMEDELAY 2000
     #define PULSE 400
+    
   // FSM
     #define FSM_RST 0
     #define FSM_HOME 1

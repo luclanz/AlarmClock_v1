@@ -38,7 +38,7 @@
         uint8_t hoursOffset;              
         uint8_t minutesOffset;             
 
-      //Timer / Alam set variables
+      //Timer - Alam set variables
         uint8_t timerMinutes;                 
         uint8_t timerSeconds;              
         boolean timerOnOff :1;                
@@ -53,8 +53,6 @@
         uint8_t rotaryCounter :7;             //Value of the knob, MAX: 99, 7bits
         uint8_t rotaryCurrentStateCLK :1;     //Value of CLK output: boolean
         uint8_t rotaryLastStateCLK :1;  
-            
-        String rotaryCurrentDir ="";          //Direction           <-- OPTIONAL?
         
         uint8_t rotaryOverflow[3] = {23, 59, 99};
         uint8_t rotaryOverflowIndex :2;
@@ -112,12 +110,10 @@ void setup() {
       alarmData.rotaryInitCounter = 0;
 
     //RTC
-      rtc_setup(RTC_INTERRUPT_PIN);                   //this is deactivated for the time being, how do i handle 3 interrupt in my alarm?
+      rtc_setup(RTC_INTERRUPT_PIN);
       
     //LCD
       display_setup();
-      pinMode(LCD_LIGHT, OUTPUT);
-      digitalWrite(LCD_LIGHT, HIGH);
 
     //ROTARY
       rotarySetupRoutine();
@@ -132,7 +128,12 @@ void loop() {
   //update state  
     alarmData.prevStateFSM = alarmData.stateFSM;
 
-  //pulsing:
+  //Polling
+    topButton.poll();
+    upButton.poll();
+    downButton.poll();
+
+  //pulsing digit when setting new time / alarm / timer
     if (alarmData.startPulsing) {
       if (millis() > alarmData.pulsingTime + PULSE) {
         alarmData.pulsingTime = millis();
@@ -140,13 +141,8 @@ void loop() {
         lcd.clear();
       }
     }
-    
-  //Polling
-    topButton.poll();
-    upButton.poll();
-    downButton.poll();
 
-  //light pulse 
+  //light pulse when pressing top in home
     if (alarmData.pulseInfo) {
       if (millis() > (alarmData.startTimePulse + TIMEDELAY)) {      //here we might have a bug when we get an overflow
         digitalWrite(LCD_LIGHT, HIGH);
@@ -267,8 +263,15 @@ void loop() {
         
         // Activate ROTARY and PULSING when entering "time_setting" states
           if (alarmData.stateFSM == FSM_SETTIMER or alarmData.stateFSM == FSM_SETTIME or alarmData.stateFSM == FSM_SETALARM) {
+            
             alarmData.rotaryInitCounter = true;
             alarmData.startPulsing = 1;
+            enableRotaryISR();
+            
+          } else {
+            
+            disableRotaryISR();
+            
           }
 
         alarmData.rotaryCounter = 0;

@@ -12,14 +12,17 @@ void display_setup()
 {
   lcd.begin();
   lcd.setPowerSave(0);
+
+  pinMode(LCD_LIGHT, OUTPUT);
+  digitalWrite(LCD_LIGHT, HIGH);
 }
 
 void display_home()
 {
   //print main time
     char time_string[10];
-    lcd.setFont(u8x8_font_inr21_2x4_n);
-    sprintf(time_string, "%02d:%02d", rtc.now().hour() + alarmData.hoursOffset, rtc.now().minute() + alarmData.minutesOffset);    
+    lcd.setFont(u8x8_font_inr21_2x4_n);     //I honestly don't know why the 0x00FF works...
+    sprintf(time_string, "%02d:%02d", (rtc.now().hour() + alarmData.hoursOffset) & 0x00FF, (rtc.now().minute() + alarmData.minutesOffset) & 0x00FF);    
     lcd.drawString(0, 1, time_string); 
 
   //print extra info when display lights up

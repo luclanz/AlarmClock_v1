@@ -31,17 +31,10 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
     rtc.disable32K();
     
     // Making it so, that the alarm will trigger an interrupt
-
-
-    //TODO: INTERRUPT MANAGEMENT##########################################################################################################
-
     
-//    pinMode(interrupt, INPUT_PULLUP);
-//    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
+    pinMode(interrupt, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
 
-
-    //####################################################################################################################################
-    
     // set alarm 1, 2 flag to false (so alarm 1, 2 didn't happen so far)
     // if not done, this easily leads to problems, as both register aren't reset on reboot/recompile
     rtc.clearAlarm(1);
@@ -62,7 +55,8 @@ void rtc_set_timer (int sec_to_alarm) //int: second of the timer
       // schedule an alarm sec_to_alarm seconds in the future --> NOTE: FOR THE TIMER WE SET THE SECOND ALARM
     if(!rtc.setAlarm1(
             rtc.now() + TimeSpan(0,0,0,sec_to_alarm),     //with this it will set a timespan of (dd, hh, mm, ss).
-            DS3231_A1_Hour                                // this mode triggers the alarm when the seconds match. See Doxygen for other options
+            DS3231_A1_Hour                                //This mode triggers the alarm when the seconds match.
+                                                          //See Doxygen for other options
     )) {
         Serial.println(F("Error, alarm wasn't set!"));
     }else {
@@ -74,8 +68,9 @@ void rtc_set_timer (int sec_to_alarm) //int: second of the timer
 void rtc_set_alarm (int delta_h, int delta_m) 
 {
     if(!rtc.setAlarm2(
-            rtc.now() + TimeSpan(0, delta_h, delta_m, 0),     //with this it will set a timespan of (dd, hh, mm, ss).
-            DS3231_A2_Hour                              // this mode triggers the alarm when the seconds match. See Doxygen for other options
+            rtc.now() + TimeSpan(0, delta_h, delta_m, 0),     //With this it will set a timespan of (dd, hh, mm, ss).
+            DS3231_A2_Hour                                    //This mode triggers the alarm when the seconds match. 
+                                                              //See Doxygen for other options
     )) {
         Serial.println(F("Error, alarm wasn't set!"));
     }else {
@@ -107,7 +102,7 @@ int rtc_hours_to_alarm (int h, int h_alarm, bool carrier) //first: actual time, 
 
 void rtc_onAlarm() {
     Serial.print(F("Alarm occured!"));
-    //this must be really small and quick
+    //this must be really small and quick might want to use a toggle and remove the serial print
     
     /*
 

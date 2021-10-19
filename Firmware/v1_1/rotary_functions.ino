@@ -7,16 +7,14 @@
     - rotaryUpdateTime()                            * those next three function may be called less frequently
     - rotaryUpdateAlarm()
     - rotaryUpdateTimer()
+    - enableRotaryISR() / disableRotaryISR()
+
+  TODO:
+    - remember to remove the print line in the ISR, too much time to execute!
 
 */
 
-void rotarySetupRoutine(){                          //FUNCTION TO CALL WHEN ENABLING THE ROTARY ENCODER
-
-  /*
-    TODO: 
-      - I may change this name into rotaryEnableRoutine if I plan on switching the interrupts during the process
-      - STILL TO BE FINISHED
-  */
+void rotarySetupRoutine(){
   
   // Input pin setup
     pinMode(ROT_CLK,INPUT);
@@ -26,22 +24,20 @@ void rotarySetupRoutine(){                          //FUNCTION TO CALL WHEN ENAB
     alarmData.rotaryLastStateCLK = digitalRead(ROT_CLK);
   
   // Interrupt setup
-    attachInterrupt(digitalPinToInterrupt(ROT_CLK), rotaryPolling, CHANGE);
-        //detachInterrupt(digitalPinToInterrupt(ROT_CLK));                                    <-- MAYBE IT CAN GET HANDY IN THE FUTURE
-        
-    attachInterrupt(digitalPinToInterrupt(ROT_DT), rotaryPolling, CHANGE);
-        //detachInterrupt(digitalPinToInterrupt(ROT_DT));
+    PCMSK2 |= B01100000;
 }
 
 
+void enableRotaryISR() {
+  PCICR |= B00000100;   // flip this 1 to activate / deactivate the interrupt
+}
+
+void disableRotaryISR() {
+  PCICR |= B00000000;   // flip this 1 to activate / deactivate the interrupt
+}
+
 //ISR
-void rotaryPolling(){                                 //FUNCTION TO CALL FOR POLLING: it updates the counter (+ or -) and considers overflow
-
-  /*
-    TODO: 
-      - I might consider to remove the direction variable, i can use a single bit instead of a string!!
-  */
-
+ISR (PCINT2_vect){
   
   //Read the current state of CLK
     alarmData.rotaryCurrentStateCLK = digitalRead(ROT_CLK);
@@ -60,7 +56,6 @@ void rotaryPolling(){                                 //FUNCTION TO CALL FOR POL
           } else {
             alarmData.rotaryCounter --;
           }
-          alarmData.rotaryCurrentDir = F("CCW");
         
       } else {
         
@@ -71,14 +66,10 @@ void rotaryPolling(){                                 //FUNCTION TO CALL FOR POL
           } else {
             alarmData.rotaryCounter ++;
           }
-          alarmData.rotaryCurrentDir = F("CW");
       }
 
       //print some info  
-        Serial.print(F("Direction: "));
-        Serial.print(alarmData.rotaryCurrentDir);
-        Serial.print(F(" | Counter: "));
-        Serial.println(alarmData.rotaryCounter);
+        //Serial.println(alarmData.rotaryCounter);
   }
 
   // Remember last CLK state
