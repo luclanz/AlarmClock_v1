@@ -52,7 +52,7 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
 
 void rtc_set_timer (int sec_to_alarm) //int: second of the timer 
 {
-      // schedule an alarm sec_to_alarm seconds in the future --> NOTE: FOR THE TIMER WE SET THE SECOND ALARM
+      // schedule an alarm sec_to_alarm seconds in the future --> NOTE: FOR THE TIMER WE SET THE SECOND ALARM ?
     if(!rtc.setAlarm1(
             rtc.now() + TimeSpan(0,0,0,sec_to_alarm),     //with this it will set a timespan of (dd, hh, mm, ss).
             DS3231_A1_Hour                                //This mode triggers the alarm when the seconds match.

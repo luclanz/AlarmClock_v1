@@ -43,10 +43,7 @@ void display_home()
 }
 
 void display_setTime()
-{
-
-  //TODO: once the rotary encoder is implemented i need to display the correct time
-    
+{    
   //upper and bottom text
     lcd.setFont(u8x8_font_chroma48medium8_r);
 
@@ -97,10 +94,7 @@ void display_alarm()
 }
 
 void display_setAlarm()
-{
-
-    //TODO: rotary update
-  
+{ 
     char time_string[10];
 
   //upper and bottom text
@@ -153,9 +147,6 @@ void display_timer()
 
 void display_setTimer()
 {
-
-    //TODO: Rotary update
-  
     char time_string[10];
 
   //upper and bottom text

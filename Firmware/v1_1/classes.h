@@ -11,7 +11,7 @@ class Button {
 
   private:
     
-    const byte pin :4;
+    const byte pin :5;
     byte state :1;
     
     uint16_t debounceMs;

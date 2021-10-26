@@ -6,6 +6,9 @@
     #include <SPI.h>
   #endif
 
+  #include "SD.h"
+  #include "TMRpcm.h"
+
 
 //Files
   #include "classes.h"
@@ -71,6 +74,9 @@
 
   //Display
     U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
+
+  //Speaker & SD
+    TMRpcm music;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 
