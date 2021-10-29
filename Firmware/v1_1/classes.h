@@ -16,7 +16,7 @@ class Button {
     
     uint16_t debounceMs;
     
-    static const uint8_t DEBOUNCE_ms = 50;
+    static const uint8_t DEBOUNCE_ms = 100;
     static const uint16_t HOLD_ms = 1250;
 
     uint16_t prevClickMs;
@@ -74,9 +74,9 @@ class Button {
           //button has been clicked
           buttonClicked = true;
           
-//          Serial.print(F("Button "));                                        
-//          Serial.print(pin);
-//          Serial.println(F(" clicked"));
+          //Serial.print(F("Button "));                                        
+          //Serial.print(pin);
+          //Serial.println(F(" clicked"));
         }
 
         //save time
@@ -99,9 +99,9 @@ class Button {
         if (!holdFired && t - holdStartMs >= HOLD_ms) {
           
           //button had been short holded
-//              Serial.print(F("Button "));                                        
-//              Serial.print(pin);
-//              Serial.println(F(" holded"));
+              //Serial.print(F("Button "));                                        
+              //Serial.print(pin);
+              //Serial.println(F(" holded"));
             
           buttonHolded = true;
           holdFired = true;

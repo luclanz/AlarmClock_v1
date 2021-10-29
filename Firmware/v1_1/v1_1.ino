@@ -6,8 +6,8 @@
     #include <SPI.h>
   #endif
 
-  #include "SD.h"
-  #include "TMRpcm.h"
+  //#include "SD.h"
+  //#include "TMRpcm.h"
 
 
 //Files
@@ -76,7 +76,7 @@
     U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
 
   //Speaker & SD
-    TMRpcm music;
+    //TMRpcm music;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 
@@ -134,10 +134,10 @@ void loop() {
   //update state  
     alarmData.prevStateFSM = alarmData.stateFSM;
 
-  //Polling
-    topButton.poll();
-    upButton.poll();
-    downButton.poll();
+    //Polling
+  topButton.poll();
+  upButton.poll();
+  downButton.poll();
 
   //pulsing digit when setting new time / alarm / timer
     if (alarmData.startPulsing) {
@@ -175,10 +175,11 @@ void loop() {
 
         display_home();
         goFromHome();
+        //Serial.println("hi");
         break;
     
       case FSM_SETTIME:
-
+        Serial.println("hi");
         //routine to inizialize the counter of the rotary when you want to change the time
           if (alarmData.rotaryInitCounter) {
             if (alarmData.twoStepSet == 0) {

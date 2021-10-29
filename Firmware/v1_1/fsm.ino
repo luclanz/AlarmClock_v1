@@ -9,14 +9,14 @@
 */
 
 void goFromHome(){   
-
-  if (upButton.buttonClicked) {
-    alarmData.stateFSM = FSM_ALARM;
-    return;
-  }
   
   if (downButton.buttonHolded) {
     alarmData.stateFSM = FSM_SETTIME;
+    return;
+  }
+
+  if (upButton.buttonClicked) {
+    alarmData.stateFSM = FSM_ALARM;
     return;
   }
  

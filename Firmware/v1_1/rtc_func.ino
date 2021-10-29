@@ -24,16 +24,20 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
 
     if(rtc.lostPower()) {
         // if 1 it means the RTC lost track of time, first member: const DateTime, secondo member: dt
-        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+        
     }
+    
+    // RUN THIS LINE IF THE TIME GETS OUT OF TRACK
+    // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     
     //we don't need the 32K Pin, so disable it
     rtc.disable32K();
     
     // Making it so, that the alarm will trigger an interrupt
     
-    pinMode(interrupt, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
+//    pinMode(interrupt, INPUT_PULLUP);
+//    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
 
     // set alarm 1, 2 flag to false (so alarm 1, 2 didn't happen so far)
     // if not done, this easily leads to problems, as both register aren't reset on reboot/recompile

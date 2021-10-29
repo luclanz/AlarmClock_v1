@@ -35,8 +35,8 @@ void enableRotaryISR() {
 }
 
 void disableRotaryISR() {
-  //PCICR &= B11111011;   <--- TEST THIS!
-  PCICR |= B00000000;   // flip this 1 to activate / deactivate the interrupt
+  PCICR &= B11111011;      //<--- TEST THIS!
+  //PCICR |= B00000000;   // flip this 1 to activate / deactivate the interrupt
 }
 
 //ISR

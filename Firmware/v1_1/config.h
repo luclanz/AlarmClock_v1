@@ -6,8 +6,8 @@
 //IOs ---------------------------------------------------------------------------------
   // PUSHBUTTON           CONSTRAINT: pin is unsigned nibble -> range 0 to 15 <- NOT ANYMORE!!! 
     #define BT_TOP 7      // TODO: might plan on making this into an external interrupt so I can wake this up (during pow management)
-    #define BT_UP A5
-    #define BT_DOWN A4
+    #define BT_UP 8
+    #define BT_DOWN 9
 
   // INTERRUPT FOR RTC
     #define RTC_INTERRUPT_PIN 2
@@ -15,9 +15,9 @@
   // LCD MODULE
     #define LCD_RST A0      //10k ohm level shifter
     #define LCD_CE A1       //220 ohm level shifter   //SPI CE
-    #define LCD_DC 8        //10k ohm level shifter   //SPI MISO: 12
-    #define LCD_DIN A3      //10k ohm level shifter   //SPI MOSI: 11
-    #define LCD_CLK A2      //10k ohm level shifter   //SPI CLK: 13
+    #define LCD_DC 12        //10k ohm level shifter   //SPI MISO: 12, previaus 8
+    #define LCD_DIN 11      //10k ohm level shifter   //SPI MOSI: 11, previous A3
+    #define LCD_CLK 13      //10k ohm level shifter   //SPI CLK: 13, previous A2
     #define LCD_LIGHT 10    //330 ohm level shifter
 
   // SD MODULE
