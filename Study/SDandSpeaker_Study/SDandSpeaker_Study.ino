@@ -4,7 +4,7 @@
     #define SD_MOSI 11
     #define SD_MISO 12
   // LM386
-    #define LM_IN 9
+    #define LM_IN 10
     
 
 #include "SD.h"
@@ -15,7 +15,7 @@
 TMRpcm tmrpcm;
 
 void setup(){
-tmrpcm.speakerPin = 9;
+tmrpcm.speakerPin = LM_IN;
 Serial.begin(9600);
 if (!SD.begin(SD_ChipSelectPin)) {
 Serial.println("SD fail");

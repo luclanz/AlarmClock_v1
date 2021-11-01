@@ -207,6 +207,9 @@ void printState(int state) {
     case 6: 
       Serial.println(F("SET TIMER"));
       break; 
+
+    case 7:
+      Serial.println(F("RING"));
   }      
 }
 

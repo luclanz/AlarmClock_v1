@@ -2,12 +2,12 @@
   #include "RTClib.h"
   #include <U8x8lib.h>
   
-  #ifdef U8X8_HAVE_HW_SPI
+  //#ifdef U8X8_HAVE_HW_SPI
     #include <SPI.h>
-  #endif
+  //#endif
 
-  //#include "SD.h"
-  //#include "TMRpcm.h"
+  #include "SD.h"
+  #include "TMRpcm.h"
 
 
 //Files
@@ -76,7 +76,7 @@
     U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
 
   //Speaker & SD
-    //TMRpcm music;
+    TMRpcm music;
 
 //----------------------------------------------------------------------------------------------------------------------------------
 
@@ -123,6 +123,15 @@ void setup() {
 
     //ROTARY
       rotarySetupRoutine();
+
+    //SD and Speaker
+      sdAndSpeaker_setup();
+
+      //display_setup();
+//      digitalWrite(LM_IN, HIGH);
+      Serial.println(digitalRead(LM_IN));
+      Serial.println(digitalRead(LCD_CE));
+//      digitalWrite(LCD_CE, LOW);
     
 
 }
@@ -157,29 +166,30 @@ void loop() {
       }
     }
 
+  //Serial.println(digitalRead(SD_CS));
+
   //fsm switch engine
     switch(alarmData.stateFSM) {
       
       case FSM_RST:
         alarmData.stateFSM = FSM_HOME;
+        //alarmData.stateFSM = FSM_RING;
         break;
     
       case FSM_HOME:
-
         //print date when top button is pressed
           if (topButton.buttonClicked) {
             alarmData.pulseInfo = true;
             digitalWrite(LCD_LIGHT, LOW); 
             alarmData.startTimePulse = millis();  
           }  
-
         display_home();
         goFromHome();
         //Serial.println("hi");
         break;
     
       case FSM_SETTIME:
-        Serial.println("hi");
+        //Serial.println("hi");
         //routine to inizialize the counter of the rotary when you want to change the time
           if (alarmData.rotaryInitCounter) {
             if (alarmData.twoStepSet == 0) {
@@ -252,6 +262,11 @@ void loop() {
 
         display_setTimer();
         goFromSetTimer();
+        break;
+
+      case FSM_RING:
+          display_ring();
+
         break;
     } 
 

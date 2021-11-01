@@ -29,7 +29,7 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
     }
     
     // RUN THIS LINE IF THE TIME GETS OUT OF TRACK
-    // rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
     
     //we don't need the 32K Pin, so disable it
     rtc.disable32K();

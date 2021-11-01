@@ -18,7 +18,7 @@
     #define LCD_DC 12        //10k ohm level shifter   //SPI MISO: 12, previaus 8
     #define LCD_DIN 11      //10k ohm level shifter   //SPI MOSI: 11, previous A3
     #define LCD_CLK 13      //10k ohm level shifter   //SPI CLK: 13, previous A2
-    #define LCD_LIGHT 10    //330 ohm level shifter
+    #define LCD_LIGHT A2    //330 ohm level shifter
 
   // SD MODULE
     #define SD_CS 4
@@ -27,7 +27,7 @@
     #define SD_MISO 12
 
   // LM386
-    #define LM_IN 9
+    #define LM_IN 10
 
   // ROTARY ENCODER
     #define ROT_CLK 6       //Those two pin are FIXED by the mask / PCINT setup (need to tweak bits if you want to change this)
@@ -46,5 +46,6 @@
     #define FSM_SETALARM 4
     #define FSM_TIMER 5
     #define FSM_SETTIMER 6
+    #define FSM_RING 7
 
 #endif
