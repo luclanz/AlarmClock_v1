@@ -143,10 +143,10 @@ void loop() {
   //update state  
     alarmData.prevStateFSM = alarmData.stateFSM;
 
-    //Polling
-  topButton.poll();
-  upButton.poll();
-  downButton.poll();
+  //Polling
+    topButton.poll();
+    upButton.poll();
+    downButton.poll();
 
   //pulsing digit when setting new time / alarm / timer
     if (alarmData.startPulsing) {

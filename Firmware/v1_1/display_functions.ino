@@ -177,8 +177,7 @@ void display_setTimer()
 
 void display_ring()
 {
-
-  //upper and bottom text
+  
     lcd.setFont(u8x8_font_chroma48medium8_r);
 
     lcd.drawString(1,2, "Coglione");
