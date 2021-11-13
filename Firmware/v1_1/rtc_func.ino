@@ -36,8 +36,8 @@ void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
     
     // Making it so, that the alarm will trigger an interrupt
     
-//    pinMode(interrupt, INPUT_PULLUP);
-//    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
+    pinMode(interrupt, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
 
     // set alarm 1, 2 flag to false (so alarm 1, 2 didn't happen so far)
     // if not done, this easily leads to problems, as both register aren't reset on reboot/recompile

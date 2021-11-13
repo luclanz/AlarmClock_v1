@@ -16,6 +16,9 @@
   //Button Variables
     Button topButton(BT_TOP);
 
+  //Speaker & SD
+    TMRpcm music;
+
 
 void setup() {
   
@@ -28,46 +31,21 @@ void setup() {
 
   //LCD
     display_setup();
-    display_something();
+    display_somethingElse();
+
+  //SD and Speaker
+    sdAndSpeaker_setup();
 
 }
 
 void loop() {
-  //Polling
-    //topButton.poll();
 
-//  if (topButton.buttonClicked) {
-//    lcd.clear();
-//    display_somethingElse();
-//  }
-//
-//  if (topButton.buttonHolded) {
-//    lcd.clear();
-//    display_something();
-//  }
+  topButton.poll();
 
-// --------------------------------------------------
-/*
-  CE rimane stranamente sempre alto.... perché?
-*/
+  if (topButton.buttonClicked) {
+    //music.disable();
+    display_something();  
+  }
 
-//  int i;
-//
-//  if (i == 0) {
-//    lcd.clear();
-//    display_something();
-//    i = 1;
-//  }
-//  
-//  if (i == 1) {
-//    lcd.clear();
-//    display_somethingElse();
-//    i = 0;
-//  }
-//
-//if (!digitalRead(LCD_CE)) {
-//  Serial.println("hey");
-//}
-  
   
 }

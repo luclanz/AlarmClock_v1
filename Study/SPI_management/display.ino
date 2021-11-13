@@ -1,5 +1,3 @@
-
-
 void display_setup() {
   
   lcd.begin();

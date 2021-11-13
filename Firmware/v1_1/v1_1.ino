@@ -1,14 +1,9 @@
 //Libraries
-  #include "RTClib.h"
   #include <U8x8lib.h>
-  
-  //#ifdef U8X8_HAVE_HW_SPI
-    #include <SPI.h>
-  //#endif
-
+  #include <SPI.h>
   #include "SD.h"
   #include "TMRpcm.h"
-
+  #include "RTClib.h"
 
 //Files
   #include "classes.h"
@@ -127,13 +122,6 @@ void setup() {
     //SD and Speaker
       sdAndSpeaker_setup();
 
-      //display_setup();
-//      digitalWrite(LM_IN, HIGH);
-      Serial.println(digitalRead(LM_IN));
-      Serial.println(digitalRead(LCD_CE));
-//      digitalWrite(LCD_CE, LOW);
-    
-
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -166,14 +154,12 @@ void loop() {
       }
     }
 
-  //Serial.println(digitalRead(SD_CS));
-
   //fsm switch engine
     switch(alarmData.stateFSM) {
       
       case FSM_RST:
-        alarmData.stateFSM = FSM_HOME;
-        //alarmData.stateFSM = FSM_RING;
+        //alarmData.stateFSM = FSM_HOME;
+        alarmData.stateFSM = FSM_RING;
         break;
     
       case FSM_HOME:
@@ -185,11 +171,9 @@ void loop() {
           }  
         display_home();
         goFromHome();
-        //Serial.println("hi");
         break;
     
       case FSM_SETTIME:
-        //Serial.println("hi");
         //routine to inizialize the counter of the rotary when you want to change the time
           if (alarmData.rotaryInitCounter) {
             if (alarmData.twoStepSet == 0) {
