@@ -1,8 +1,8 @@
 //Libraries ---------------------------------------------------------------------
-  #include <U8x8lib.h>
   #include <SPI.h>
-  #include "SD.h"
-  #include "TMRpcm.h"
+  #include <U8x8lib.h>
+//  #include "SD.h"
+//  #include "TMRpcm.h"
 
 
 //Files -------------------------------------------------------------------------
@@ -11,13 +11,16 @@
 
 //Declaration -------------------------------------------------------------------
   //Display
-    U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
+    //U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
+    U8X8_PCD8544_84X48_2ND_4W_HW_SPI lcd(LCD_CE, LCD_DC, LCD_RST);
+    //U8X8_PCD8544_84X48_3W_HW_SPI lcd(LCD_CE, LCD_RST);
+
     
-  //Button Variables
+ //Button Variables
     Button topButton(BT_TOP);
 
   //Speaker & SD
-    TMRpcm music;
+    //TMRpcm music;
 
 
 void setup() {
@@ -34,7 +37,7 @@ void setup() {
     display_somethingElse();
 
   //SD and Speaker
-    sdAndSpeaker_setup();
+    //sdAndSpeaker_setup();
 
 }
 
@@ -44,7 +47,8 @@ void loop() {
 
   if (topButton.buttonClicked) {
     //music.disable();
-    display_something();  
+    display_something();
+    Serial.println("hey");  
   }
 
   

@@ -1,14 +1,10 @@
 void display_setup() {
   
   lcd.begin();
-  lcd.setPowerSave(0);
-
-  lcd.clear();
 
   pinMode(LCD_LIGHT, OUTPUT);
   digitalWrite(LCD_LIGHT, HIGH);
 }
-
 
 
 void display_something () {

@@ -215,7 +215,7 @@ void printState(int state) {
 
 void updateOffset() {
 
-    Serial.println(F("UPDATED OFFSET"));
+    // Serial.println(F("UPDATED OFFSET"));
 
     alarmData.hoursOffset = alarmData.hoursOffset - rtc.now().hour();
     alarmData.minutesOffset = alarmData.minutesOffset - rtc.now().minute();
