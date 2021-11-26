@@ -1,6 +1,7 @@
 void display_setup() {
   
-  lcd.begin();
+  lcd.LCDInit(false, 0xBF, 0x13); // init  the lCD
+  lcd.LCDClear(0x00); // Clear whole screen
 
   pinMode(LCD_LIGHT, OUTPUT);
   digitalWrite(LCD_LIGHT, HIGH);
@@ -8,11 +9,15 @@ void display_setup() {
 
 
 void display_something () {
-    lcd.setFont(u8x8_font_chroma48medium8_r);
-    lcd.drawString(1,2, "Coglione");
+  lcd.LCDClear(0x00); // Clear whole screen
+  lcd.LCDFont(2); // Set the font
+  lcd.LCDgotoXY(0, 0); // (go to (X , Y) (0-84 columns, 0-5 blocks) top left corner
+  lcd.LCDString("HELLO"); // print
 }
 
 void display_somethingElse () {
-    lcd.setFont(u8x8_font_chroma48medium8_r);
-    lcd.drawString(1,2, "Pirla");
+  lcd.LCDClear(0x00); // Clear whole screen
+  lcd.LCDFont(8);
+  lcd.LCDgotoXY(0, 2); 
+  lcd.LCDString("10:15"); // print
 }

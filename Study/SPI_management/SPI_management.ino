@@ -1,8 +1,8 @@
 //Libraries ---------------------------------------------------------------------
   #include <SPI.h>
-  #include <U8x8lib.h>
-//  #include "SD.h"
-//  #include "TMRpcm.h"
+  #include <NOKIA5110_TEXT.h>
+  #include "SD.h"
+  #include "TMRpcm.h"
 
 
 //Files -------------------------------------------------------------------------
@@ -11,16 +11,13 @@
 
 //Declaration -------------------------------------------------------------------
   //Display
-    //U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
-    U8X8_PCD8544_84X48_2ND_4W_HW_SPI lcd(LCD_CE, LCD_DC, LCD_RST);
-    //U8X8_PCD8544_84X48_3W_HW_SPI lcd(LCD_CE, LCD_RST);
-
+    NOKIA5110_TEXT lcd(LCD_RST, LCD_CE, LCD_DC);
     
  //Button Variables
     Button topButton(BT_TOP);
 
   //Speaker & SD
-    //TMRpcm music;
+    TMRpcm music;
 
 
 void setup() {
@@ -37,7 +34,7 @@ void setup() {
     display_somethingElse();
 
   //SD and Speaker
-    //sdAndSpeaker_setup();
+    sdAndSpeaker_setup();
 
 }
 
@@ -47,8 +44,9 @@ void loop() {
 
   if (topButton.buttonClicked) {
     //music.disable();
-    display_something();
-    Serial.println("hey");  
+    music.pause();
+    display_something(); 
+    music.pause(); 
   }
 
   

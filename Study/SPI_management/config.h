@@ -9,7 +9,7 @@
   // LCD MODULE
     #define LCD_RST A0      //10k ohm level shifter
     #define LCD_CE A1       //220 ohm level shifter   //SPI CE
-    #define LCD_DC 12        //10k ohm level shifter   //SPI MISO: 12, previaus 12
+    #define LCD_DC 5        //10k ohm level shifter   //SPI MISO: 12, w/ 12 doesn't seem to work
     #define LCD_DIN 11      //10k ohm level shifter   //SPI MOSI: 11, previous 11
     #define LCD_CLK 13      //10k ohm level shifter   //SPI CLK: 13, previous A2
     #define LCD_LIGHT A2    //330 ohm level shifter
