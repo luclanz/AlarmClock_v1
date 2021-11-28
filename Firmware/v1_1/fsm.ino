@@ -62,7 +62,8 @@ void goFromAlarm(){
   //toggle alarm
   if (downButton.buttonClicked) {
     alarmData.alarmOnOff = !alarmData.alarmOnOff;
-    lcd.clear();
+    //lcd.clear();
+    lcd.LCDClear(0x00);
   }
 
   if (topButton.buttonClicked) {
@@ -126,7 +127,8 @@ void goFromTimer(){
   //toggle timer
   if (downButton.buttonClicked) {
     alarmData.timerOnOff = !alarmData.timerOnOff;
-    lcd.clear();
+    //lcd.clear();
+    lcd.LCDClear(0x00);
   }
   
   if (topButton.buttonClicked || upButton.buttonClicked) {

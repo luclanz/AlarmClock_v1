@@ -45,8 +45,10 @@ void loop() {
   if (topButton.buttonClicked) {
     //music.disable();
     music.pause();
+    delay(10);
     display_something(); 
     music.pause(); 
+    delay(10);
   }
 
   

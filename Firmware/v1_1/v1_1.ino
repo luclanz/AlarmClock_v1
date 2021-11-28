@@ -1,5 +1,6 @@
 //Libraries
-  #include <U8x8lib.h>
+  //#include <U8x8lib.h>
+  #include <NOKIA5110_TEXT.h>
   #include <SPI.h>
   #include "SD.h"
   #include "TMRpcm.h"
@@ -68,7 +69,8 @@
     char monthsOfTheYear [13][4] = {"dec", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"};
 
   //Display
-    U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
+    //U8X8_PCD8544_84X48_4W_SW_SPI lcd(LCD_CLK, LCD_DIN, LCD_CE, LCD_DC, LCD_RST); 
+    NOKIA5110_TEXT lcd(LCD_RST, LCD_CE, LCD_DC);
 
   //Speaker & SD
     TMRpcm music;
@@ -100,7 +102,7 @@ void setup() {
       alarmData.minutesOffset = 0;
       alarmData.timerMinutes = 10;       
       alarmData.timerSeconds = 0;
-      alarmData.timerOnOff = 0;
+      alarmData.timerOnOff = 1;                                   //remember to toggle this back to 0
       alarmData.alarmHours = 7;
       alarmData.alarmMinutes = 0;
       alarmData.alarmOnOff = 0;
@@ -141,7 +143,8 @@ void loop() {
       if (millis() > alarmData.pulsingTime + PULSE) {
         alarmData.pulsingTime = millis();
         alarmData.pulsing = !alarmData.pulsing;
-        lcd.clear();
+        //lcd.clear();
+        lcd.LCDClear(0x00);
       }
     }
 
@@ -150,7 +153,8 @@ void loop() {
       if (millis() > (alarmData.startTimePulse + TIMEDELAY)) {      //here we might have a bug when we get an overflow
         digitalWrite(LCD_LIGHT, HIGH);
         alarmData.pulseInfo = false;
-        lcd.clear();
+        //lcd.clear();
+        lcd.LCDClear(0x00);
       }
     }
 
@@ -158,8 +162,8 @@ void loop() {
     switch(alarmData.stateFSM) {
       
       case FSM_RST:
-        //alarmData.stateFSM = FSM_HOME;
-        alarmData.stateFSM = FSM_RING;
+        alarmData.stateFSM = FSM_HOME;
+        //alarmData.stateFSM = FSM_RING;
         break;
     
       case FSM_HOME:
@@ -262,7 +266,8 @@ void loop() {
           printState(alarmData.stateFSM);
           
         //clear lcd
-          lcd.clear();
+          //lcd.clear();
+          lcd.LCDClear(0x00);
           
         //reset pulsing
           alarmData.startPulsing = 0;

@@ -4,18 +4,22 @@
 #include "Arduino.h"
 
 //IOs ---------------------------------------------------------------------------------
-  // PUSHBUTTON           CONSTRAINT: pin is unsigned nibble -> range 0 to 15 <- NOT ANYMORE!!! 
+  // PUSHBUTTON
     #define BT_TOP 7      // TODO: might plan on making this into an external interrupt so I can wake this up (during pow management)
     #define BT_UP 8
     #define BT_DOWN 9
 
-  // INTERRUPT FOR RTC
-    #define RTC_INTERRUPT_PIN 2
+  // RTC MODULE
+    #define RTC_INTERRUPT_PIN 2 //SQW pin
+    //SDA: Analog Input 4
+    //SCL: Analog Input 5
+    //32K output is not active
+    
     
   // LCD MODULE
     #define LCD_RST A0      //10k ohm level shifter
     #define LCD_CE A1       //220 ohm level shifter   //SPI CE
-    #define LCD_DC A5        //10k ohm level shifter   //SPI MISO: 12 << Those three need to have different pins assigned to avoid conflict with SD.h / TMRcpm.h
+    #define LCD_DC 3        //10k ohm level shifter   //SPI MISO: 12 << Those three need to have different pins assigned to avoid conflict with SD.h / TMRcpm.h
     #define LCD_DIN A4      //10k ohm level shifter   //SPI MOSI: 11
     #define LCD_CLK A3      //10k ohm level shifter   //SPI CLK: 13
     #define LCD_LIGHT A2    //330 ohm level shifter
@@ -47,5 +51,10 @@
     #define FSM_TIMER 5
     #define FSM_SETTIMER 6
     #define FSM_RING 7
+
+  // FONTS
+    #define fontNumber 8
+    #define fontLetter 6
+    #define fontBold 2
 
 #endif
