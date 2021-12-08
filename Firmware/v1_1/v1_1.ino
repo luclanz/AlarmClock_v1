@@ -122,7 +122,7 @@ void setup() {
       rotarySetupRoutine();
 
     //SD and Speaker
-      sdAndSpeaker_setup();
+      //sdAndSpeaker_setup();
 
 }
 

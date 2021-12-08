@@ -32,15 +32,15 @@ void display_home()
     lcd.LCDFont(fontNumber);
                                                       //I honestly don't know why the 0x00FF works...
     sprintf(time_string, "%02d:%02d", 
-                    (rtc.now().hour() + alarmData.hoursOffset) & 0x00FF, 
-                    (rtc.now().minute() + alarmData.minutesOffset) & 0x00FF);    
+                    (rtc.now().hour() + alarmData.hoursOffset)     & 0x00FF, 
+                    (rtc.now().minute() + alarmData.minutesOffset) & 0x00FF );    
     lcd.LCDgotoXY(0, 2);
     lcd.LCDString(time_string);
 
   //Print Extra Info
     //Date
+      lcd.LCDFont(fontLetter);
       if (alarmData.pulseInfo) {
-        lcd.LCDFont(fontLetter);
         sprintf(time_string, "%s %d %s", 
                       daysOfTheWeek[rtc.now().dayOfTheWeek()], 
                       rtc.now().day(), 
@@ -48,16 +48,14 @@ void display_home()
         lcd.LCDgotoXY(18, 5);
         lcd.LCDString(time_string);
     //Alarm / Timer active
+      lcd.LCDgotoXY(0, 1);
       if (alarmData.alarmOnOff & alarmData.timerOnOff) {
-        lcd.LCDgotoXY(0, 1);
         lcd.LCDString("Alarm Timer");
       } else {
         if (alarmData.alarmOnOff) {
-          lcd.LCDgotoXY(0, 1);
           lcd.LCDString("Alarm");
         }  
         if (alarmData.timerOnOff) {
-          lcd.LCDgotoXY(0, 1);
           lcd.LCDString("Timer");
         }     
       } 
@@ -66,142 +64,156 @@ void display_home()
 
 void display_setTime()
 {    
-//  //upper and bottom text
-//    lcd.setFont(u8x8_font_chroma48medium8_r);
-//
-//    lcd.drawString(3,0, "Time");
-//    lcd.drawString(4, 5, "SET");
-//
-//  //main text
-//    char time_string[5];
-//    lcd.setFont(u8x8_font_inr21_2x4_n);    
-//    if (alarmData.pulsing) {
-//        sprintf(time_string, "%02d:%02d", alarmData.hoursOffset, alarmData.minutesOffset); 
-//        lcd.drawString(0, 1, time_string);  
-//          
-//    } else {
-//      if (alarmData.twoStepSet) {
-//        //twoStepSet = 1:
-//        sprintf(time_string, "%02d:", alarmData.hoursOffset); 
-//        lcd.drawString(0, 1, time_string); 
-//   
-//      } else {
-//        //twoStepSet = 0:
-//        sprintf(time_string, ":%02d", alarmData.minutesOffset); 
-//        lcd.drawString(4, 1, time_string); 
-//      }
-//    }
+  //upper and bottom text
+    lcd.LCDFont(fontLetter);
+    
+    lcd.LCDgotoXY(0, 1);
+    lcd.LCDString("Time SET");
+
+  //main text
+    char time_string[5];
+    lcd.LCDFont(fontNumber);  
+    if (alarmData.pulsing) {
+        lcd.LCDgotoXY(0, 2);
+        sprintf(time_string, "%02d:%02d", alarmData.hoursOffset, alarmData.minutesOffset); 
+        lcd.LCDString(time_string);  
+          
+    } else {
+      if (alarmData.twoStepSet) {
+        //twoStepSet = 1:
+        lcd.LCDgotoXY(0, 2);
+        sprintf(time_string, "%02d:", alarmData.hoursOffset); 
+        lcd.LCDString(time_string); 
+   
+      } else {
+        //twoStepSet = 0:
+        lcd.LCDgotoXY(32, 2);
+        sprintf(time_string, ":%02d", alarmData.minutesOffset); 
+        lcd.LCDString(time_string); 
+      }
+    }
 }
 
 void display_alarm()
 {
-//  //print alarm time
-//    char time_string[10];
-//
-//  //upper and bottom text
-//    lcd.setFont(u8x8_font_chroma48medium8_r);
-//
-//    lcd.drawString(3,0, "Alarm");
-//    
-//    if (alarmData.alarmOnOff) {
-//      lcd.drawString(4, 5, "ON");
-//    } else {
-//      lcd.drawString(4, 5, "OFF"); 
-//    }
-//    
-//  //main text
-//    lcd.setFont(u8x8_font_inr21_2x4_n);
-//    sprintf(time_string, "%02d:%02d", alarmData.alarmHours, alarmData.alarmMinutes);    
-//    lcd.drawString(0, 1, time_string); 
+  // Print Alamr Time
+    char time_string[10];
+
+    // Upper and Bottom Text
+      lcd.LCDFont(fontLetter); 
+
+      lcd.LCDgotoXY(0, 1);
+      lcd.LCDString("Alarm");    
+
+      lcd.LCDgotoXY(66, 5);
+      if (alarmData.alarmOnOff) {
+        lcd.LCDString("ON");
+      } else {
+        lcd.LCDString("OFF"); 
+      }
+
+    // Main Text
+      lcd.LCDFont(fontNumber);
+      lcd.LCDgotoXY(0, 2);
+      sprintf(time_string, "%02d:%02d", alarmData.alarmHours, alarmData.alarmMinutes);    
+      lcd.LCDString(time_string); 
 }
 
 void display_setAlarm()
 { 
-//    char time_string[10];
-//
-//  //upper and bottom text
-//    lcd.setFont(u8x8_font_chroma48medium8_r);
-//
-//    lcd.drawString(3,0, "Alarm");
-//    lcd.drawString(4, 5, "SET");
-//
-//  //main text
-//    lcd.setFont(u8x8_font_inr21_2x4_n);    
-//    if (alarmData.pulsing) {
-//        sprintf(time_string, "%02d:%02d", alarmData.alarmHours, alarmData.alarmMinutes); 
-//        lcd.drawString(0, 1, time_string);  
-//          
-//    } else {
-//      if (alarmData.twoStepSet) {
-//        //twoStepSet = 1:
-//        sprintf(time_string, "%02d:", alarmData.alarmHours); 
-//        lcd.drawString(0, 1, time_string); 
-//   
-//      } else {
-//        //twoStepSet = 0:
-//        sprintf(time_string, ":%02d", alarmData.alarmMinutes); 
-//        lcd.drawString(4, 1, time_string); 
-//      }
-//    }
+    char time_string[10];
+
+  //upper and bottom text
+    lcd.LCDFont(fontLetter);
+    
+    lcd.LCDgotoXY(0, 1);
+    lcd.LCDString("Alarm SET");
+
+  //main text
+    lcd.LCDFont(fontNumber);    
+    if (alarmData.pulsing) {
+      lcd.LCDgotoXY(0, 2);
+      sprintf(time_string, "%02d:%02d", alarmData.alarmHours, alarmData.alarmMinutes); 
+      lcd.LCDString(time_string);  
+    } else {
+      if (alarmData.twoStepSet) {
+        //twoStepSet = 1:
+        lcd.LCDgotoXY(0, 2);
+        sprintf(time_string, "%02d:", alarmData.alarmHours); 
+        lcd.LCDString(time_string); 
+   
+      } else {
+        //twoStepSet = 0:
+        lcd.LCDgotoXY(32, 2);
+        sprintf(time_string, ":%02d", alarmData.alarmMinutes); 
+        lcd.LCDString(time_string); 
+      }
+    }
 }
 
 void display_timer()
-{
-//  //print timer
-//    char time_string[10];
-//
-//  //upper and bottom text
-//    lcd.setFont(u8x8_font_chroma48medium8_r);
-//
-//    lcd.drawString(3,0, "Timer");
-//    
-//    if (alarmData.timerOnOff) {
-//      lcd.drawString(4, 5, "ON");
-//    } else {
-//      lcd.drawString(4, 5, "OFF"); 
-//    }
-//    
-//  //main text
-//    lcd.setFont(u8x8_font_inr21_2x4_n);
-//    sprintf(time_string, "%02d:%02d", alarmData.timerMinutes, alarmData.timerSeconds);    
-//    lcd.drawString(0, 1, time_string);  
+{  
+  // Print Timer
+    char time_string[10];
+    
+  // Upper and Bottom text
+    // Upper and Bottom Text
+      lcd.LCDFont(fontLetter); 
+
+      lcd.LCDgotoXY(0, 1);
+      lcd.LCDString("Timer");    
+
+      lcd.LCDgotoXY(66, 5);
+      if (alarmData.timerOnOff) {
+        lcd.LCDString("ON");
+      } else {
+        lcd.LCDString("OFF"); 
+      }
+          
+  // Main Text
+    lcd.LCDFont(fontNumber);
+    lcd.LCDgotoXY(0, 2);
+    sprintf(time_string, "%02d:%02d", alarmData.timerMinutes, alarmData.timerSeconds);    
+    lcd.LCDString(time_string);   
 }
 
 void display_setTimer()
 {
-//    char time_string[10];
-//
-//  //upper and bottom text
-//    lcd.setFont(u8x8_font_chroma48medium8_r);
-//
-//    lcd.drawString(3,0, "Timer");
-//    lcd.drawString(4, 5, "SET");
-//
-//  //main text
-//    lcd.setFont(u8x8_font_inr21_2x4_n);    
-//    if (alarmData.pulsing) {
-//        sprintf(time_string, "%02d:%02d", alarmData.timerMinutes, alarmData.timerSeconds); 
-//        lcd.drawString(0, 1, time_string);  
-//          
-//    } else {
-//      if (alarmData.twoStepSet) {
-//        //twoStepSet = 1:
-//        sprintf(time_string, "%02d:", alarmData.timerMinutes); 
-//        lcd.drawString(0, 1, time_string); 
-//   
-//      } else {
-//        //twoStepSet = 0:
-//        sprintf(time_string, ":%02d", alarmData.timerSeconds); 
-//        lcd.drawString(4, 1, time_string); 
-//      }
-//    }
+    char time_string[10];
+
+  //upper and bottom text
+    lcd.LCDFont(fontLetter);
+    
+    lcd.LCDgotoXY(0, 1);
+    lcd.LCDString("Timer SET");
+
+  //main text
+    lcd.LCDFont(fontNumber);     
+    if (alarmData.pulsing) {
+      lcd.LCDgotoXY(0, 2);
+      sprintf(time_string, "%02d:%02d", alarmData.timerMinutes, alarmData.timerSeconds); 
+      lcd.LCDString(time_string);        
+    } else {
+      if (alarmData.twoStepSet) {
+        //twoStepSet = 1:
+        lcd.LCDgotoXY(0, 2);
+        sprintf(time_string, "%02d:", alarmData.timerMinutes); 
+        lcd.LCDString(time_string); 
+   
+      } else {
+        //twoStepSet = 0:
+        lcd.LCDgotoXY(32, 2);
+        sprintf(time_string, ":%02d", alarmData.timerSeconds); 
+        lcd.LCDString(time_string); 
+      }
+    }
 }
 
 void display_ring()
 {
-//  
-//    lcd.setFont(u8x8_font_chroma48medium8_r);
-//
-//    lcd.drawString(1,2, "Coglione");
-//    
+  
+    lcd.LCDFont(fontLetter);
+    lcd.LCDgotoXY(0, 1);
+    lcd.LCDString("Coglione");
+    
 }
