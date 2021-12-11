@@ -7,6 +7,7 @@
     - rtc_set_alarm()
     - rtc_minutes_to_alarm()
     - rtc_hours_to_alarm()
+    - rtc_disable_alarm/timer()
     - rtc_onAlarm()               <-- TODO
 
 */
@@ -64,7 +65,7 @@ void rtc_set_timer (int sec_to_alarm) //int: second of the timer
     )) {
         Serial.println(F("Error, alarm wasn't set!"));
     }else {
-        Serial.print(F("Alarm1 (timer_related) will happen in "));
+        Serial.print(F("Timer will happen in "));
         Serial.println(sec_to_alarm);  
     }
 }
@@ -78,7 +79,7 @@ void rtc_set_alarm (int delta_h, int delta_m)
     )) {
         Serial.println(F("Error, alarm wasn't set!"));
     }else {
-        Serial.print(F("Alarm2 (alarm_related) will happen in "));
+        Serial.print(F("Alarm will happen in "));
         Serial.print(delta_h); 
         Serial.print(F(" hours and "));
         Serial.print(delta_m); 
@@ -104,13 +105,17 @@ int rtc_hours_to_alarm (int h, int h_alarm, bool carrier) //first: actual time, 
   return (h_alarm - h - 1 * carrier);
 }
 
+void rtc_disable_timer() {
+  rtc.clearAlarm(1);
+  rtc.disableAlarm(1);
+}
+
+void rtc_disable_alarm() {
+  rtc.clearAlarm(2);
+  rtc.disableAlarm(2);
+}
+
 void rtc_onAlarm() {
-    Serial.print(F("Alarm occured!"));
-    //this must be really small and quick might want to use a toggle and remove the serial print
-    
-    /*
-
-    TODO
-
-    */
+    alarmData.enteringRingMode = 1;
+    alarmData.stateFSM = FSM_RING;
 }

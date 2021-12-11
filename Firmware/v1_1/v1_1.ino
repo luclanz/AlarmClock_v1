@@ -56,6 +56,11 @@
         uint8_t rotaryOverflow[3] = {23, 59, 99};
         uint8_t rotaryOverflowIndex :2;
         uint8_t rotaryInitCounter :1;
+
+      //Timer - Alarm Management
+        uint8_t enteringRingMode :1;
+        uint8_t alarmRinging :1;
+        uint8_t timerRinging :1;          // Later
         
     };
     
@@ -91,8 +96,8 @@ void setup() {
       downButton.setup();
       
     //alarmData
-      alarmData.stateFSM = 0;
-      alarmData.prevStateFSM = 0;
+      alarmData.stateFSM = FSM_RST;                               // CHANGE THIS TO DEBUG
+      alarmData.prevStateFSM = FSM_RST;
       alarmData.pulsing = 0;
       alarmData.startPulsing = 0;
       alarmData.pulsingTime = millis();
@@ -102,7 +107,7 @@ void setup() {
       alarmData.minutesOffset = 0;
       alarmData.timerMinutes = 10;       
       alarmData.timerSeconds = 0;
-      alarmData.timerOnOff = 1;                                   //remember to toggle this back to 0
+      alarmData.timerOnOff = 0;
       alarmData.alarmHours = 7;
       alarmData.alarmMinutes = 0;
       alarmData.alarmOnOff = 0;
@@ -111,6 +116,10 @@ void setup() {
       alarmData.rotaryCounter = 0;
       alarmData.rotaryOverflowIndex = 0;
       alarmData.rotaryInitCounter = 0;
+
+      alarmData.enteringRingMode = 0;
+      alarmData.timerRinging = 0;
+      alarmData.alarmRinging = 0;
 
     //RTC
       rtc_setup(RTC_INTERRUPT_PIN);
@@ -122,7 +131,7 @@ void setup() {
       rotarySetupRoutine();
 
     //SD and Speaker
-      //sdAndSpeaker_setup();
+      sdAndSpeaker_setup();
 
 }
 
@@ -153,7 +162,6 @@ void loop() {
       if (millis() > (alarmData.startTimePulse + TIMEDELAY)) {      //here we might have a bug when we get an overflow
         digitalWrite(LCD_LIGHT, HIGH);
         alarmData.pulseInfo = false;
-        //lcd.clear();
         lcd.LCDClear(0x00);
       }
     }
@@ -164,6 +172,7 @@ void loop() {
       case FSM_RST:
         alarmData.stateFSM = FSM_HOME;
         //alarmData.stateFSM = FSM_RING;
+        rtc_set_alarm(0,1);
         break;
     
       case FSM_HOME:
@@ -253,7 +262,27 @@ void loop() {
         break;
 
       case FSM_RING:
-          display_ring();
+        // first time entering
+          if (alarmData.enteringRingMode) {
+            alarmData.enteringRingMode = 0;
+            Serial.println(F("Alarm occured!"));
+            alarm_checkAlarm();
+            digitalWrite(LCD_LIGHT, LOW);
+          }
+
+        // alarm handling
+          if (alarmData.alarmRinging) {
+            exitRingAlarm();
+          }
+
+          //alarmData.startPulsing = 1;
+          //display_ring();
+          //exitRingAlarm();
+          /*
+           * if (alarmData.timerRinging) {
+           *   display_ring();
+           * }
+           */
 
         break;
     } 
@@ -266,7 +295,6 @@ void loop() {
           printState(alarmData.stateFSM);
           
         //clear lcd
-          //lcd.clear();
           lcd.LCDClear(0x00);
           
         //reset pulsing

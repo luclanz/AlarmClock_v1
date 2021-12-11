@@ -37,7 +37,7 @@ void display_home()
     lcd.LCDgotoXY(0, 2);
     lcd.LCDString(time_string);
 
-  //Print Extra Info
+  //Print Extra Info                          <-- THERE IS A BUG HERE
     //Date
       lcd.LCDFont(fontLetter);
       if (alarmData.pulseInfo) {
@@ -211,9 +211,12 @@ void display_setTimer()
 
 void display_ring()
 {
+  lcd.LCDFont(fontBold);
+  lcd.LCDgotoXY(10, 2);
+  lcd.LCDString("WAKE UP");
   
-    lcd.LCDFont(fontLetter);
-    lcd.LCDgotoXY(0, 1);
-    lcd.LCDString("Coglione");
+  lcd.LCDFont(fontLetter);
+  lcd.LCDgotoXY(15, 3);
+  lcd.LCDString("you dumbass");
     
 }

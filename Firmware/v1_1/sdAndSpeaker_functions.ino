@@ -16,6 +16,16 @@ void sdAndSpeaker_setup() {
     
 }
 
+void sdAndSpeaker_startMusicAlarm() {
+  music.setVolume(4);
+  music.play("Daybreak.wav");
+  music.quality(2);
+}
+
+void sdAndSpeaker_stopMusicAlarm() {
+  music.disable();
+}
+
 /*
   TMRpcm audio;
   audio.play("filename");    plays a file
