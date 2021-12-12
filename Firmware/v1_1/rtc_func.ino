@@ -2,13 +2,13 @@
 
   Functions:
 
-    - rtc_setup()                 <-- REMEMBER TO ACTIVATE THE INTERRUPT ONCE PROPER MANAGEMENT IS DONE
+    - rtc_setup()
     - rtc_set_timer()
     - rtc_set_alarm()
     - rtc_minutes_to_alarm()
     - rtc_hours_to_alarm()
     - rtc_disable_alarm/timer()
-    - rtc_onAlarm()               <-- TODO
+    - rtc_onAlarm()
 
 */
 
@@ -108,11 +108,13 @@ int rtc_hours_to_alarm (int h, int h_alarm, bool carrier) //first: actual time, 
 void rtc_disable_timer() {
   rtc.clearAlarm(1);
   rtc.disableAlarm(1);
+  alarmData.timerOnOff = 0;
 }
 
 void rtc_disable_alarm() {
   rtc.clearAlarm(2);
   rtc.disableAlarm(2);
+  alarmData.alarmOnOff = 0;
 }
 
 void rtc_onAlarm() {

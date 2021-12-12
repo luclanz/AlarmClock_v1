@@ -172,7 +172,7 @@ void loop() {
       case FSM_RST:
         alarmData.stateFSM = FSM_HOME;
         //alarmData.stateFSM = FSM_RING;
-        rtc_set_alarm(0,1);
+        //rtc_set_alarm(0,1);
         break;
     
       case FSM_HOME:
@@ -187,76 +187,30 @@ void loop() {
         break;
     
       case FSM_SETTIME:
-        //routine to inizialize the counter of the rotary when you want to change the time
-          if (alarmData.rotaryInitCounter) {
-            if (alarmData.twoStepSet == 0) {
-              
-              //here is the first time we enter the setup -> we are tweaking the hours
-                alarmData.hoursOffset = alarmData.hoursOffset + rtc.now().hour();
-                alarmData.minutesOffset = alarmData.minutesOffset + rtc.now().minute();
-  
-              //this line is so that the rotary counts along the current time
-                alarmData.rotaryCounter = alarmData.hoursOffset;
-                
-            } else {
-              
-              //this line is so that the rotary counts along the current time
-                alarmData.rotaryCounter = alarmData.minutesOffset;
-            }
-  
-            //the rotary counter has been initialized so now back to false
-              alarmData.rotaryInitCounter = false;
-            
-          }
-          rotaryUpdateTime();
-
-      
+        state_setTime();
         display_setTime();
         goFromSetTime();
         break;
     
       case FSM_ALARM:
-
+        state_alarm();
         display_alarm();
         goFromAlarm();
         break;
     
       case FSM_SETALARM:
-
-        //routine to inizialize the counter of the rotary when you want to change the time
-          if (alarmData.rotaryInitCounter) {
-            if (alarmData.twoStepSet == 0) {
-              alarmData.rotaryCounter = alarmData.alarmHours;
-            } else {
-              alarmData.rotaryCounter = alarmData.alarmMinutes;
-            }
-            alarmData.rotaryInitCounter = false;
-          }
-          rotaryUpdateAlarm();
-
+        state_setAlarm();
         display_setAlarm();
         goFromSetAlarm();
         break;
     
       case FSM_TIMER:
-    
         display_timer();
         goFromTimer();
         break;
     
       case FSM_SETTIMER:
-
-        //routine to inizialize the counter of the rotary when you want to change the time
-          if (alarmData.rotaryInitCounter) {
-            if (alarmData.twoStepSet == 0) {
-              alarmData.rotaryCounter = alarmData.timerMinutes;
-            } else {
-              alarmData.rotaryCounter = alarmData.timerSeconds;
-            }
-            alarmData.rotaryInitCounter = false;
-          }
-          rotaryUpdateTimer();
-
+        state_setTimer();
         display_setTimer();
         goFromSetTimer();
         break;
@@ -264,9 +218,10 @@ void loop() {
       case FSM_RING:
         // first time entering
           if (alarmData.enteringRingMode) {
-            alarmData.enteringRingMode = 0;
             Serial.println(F("Alarm occured!"));
-            alarm_checkAlarm();
+            
+            alarmData.enteringRingMode = 0;
+            alarm_checkAlarmRountine();
             digitalWrite(LCD_LIGHT, LOW);
           }
 
@@ -275,14 +230,11 @@ void loop() {
             exitRingAlarm();
           }
 
-          //alarmData.startPulsing = 1;
-          //display_ring();
-          //exitRingAlarm();
-          /*
-           * if (alarmData.timerRinging) {
-           *   display_ring();
-           * }
-           */
+        /*                                                                                  TODO
+         * if (alarmData.timerRinging) {
+         *   display_ring();
+         * }
+         */
 
         break;
     } 
