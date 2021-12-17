@@ -10,6 +10,7 @@ void state_alarm() {
   //toggle alarm
     if (downButton.buttonClicked) {
       alarmData.alarmOnOff = !alarmData.alarmOnOff;
+      alarmData.refresh = 1;
       lcd.LCDClear(0x00);
 
       if (alarmData.alarmOnOff) {

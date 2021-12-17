@@ -53,6 +53,7 @@ void goFromSetTime(){
     };
     alarmData.rotaryInitCounter = true;
     alarmData.twoStepSet += 1;
+    alarmData.refresh = 1;
   };
   
 }
@@ -111,6 +112,7 @@ void goFromSetAlarm(){
     
     alarmData.rotaryInitCounter = true;
     alarmData.twoStepSet += 1; 
+    alarmData.refresh = 1;
   };
   
 }
@@ -121,6 +123,7 @@ void goFromTimer(){
   if (downButton.buttonClicked) {
     alarmData.timerOnOff = !alarmData.timerOnOff;
     //lcd.clear();
+    alarmData.refresh = 1;
     lcd.LCDClear(0x00);
   }
   

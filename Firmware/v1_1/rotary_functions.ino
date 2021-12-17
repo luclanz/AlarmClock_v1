@@ -58,6 +58,7 @@ ISR (PCINT2_vect){
             alarmData.rotaryCounter = alarmData.rotaryOverflow[alarmData.rotaryOverflowIndex];
           } else {
             alarmData.rotaryCounter --;
+            alarmData.refresh = 1;
           }
         
       } else {
@@ -68,6 +69,7 @@ ISR (PCINT2_vect){
             alarmData.rotaryCounter = 0;
           } else {
             alarmData.rotaryCounter ++;
+            alarmData.refresh = 1;
           }
       }
 

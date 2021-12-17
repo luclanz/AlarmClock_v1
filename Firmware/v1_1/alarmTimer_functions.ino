@@ -19,6 +19,8 @@ void alarm_checkAlarmRountine () {
         alarmData.alarmRinging = 1;
 
       // display message
+        lcd.LCDClear(0x00);
+        delay(100);
         display_ring();
 
       // (delay to close SPI) + starts music

@@ -24,6 +24,9 @@
         uint8_t stateFSM :3;                  //7 states -> 3bits (0 to 7)
         uint8_t prevStateFSM :3;
 
+      //Display Refresh
+        uint8_t refresh :1;
+
       //For setting time (UX)
         boolean pulsing :1;
         boolean startPulsing :1;
@@ -121,6 +124,8 @@ void setup() {
       alarmData.timerRinging = 0;
       alarmData.alarmRinging = 0;
 
+      alarmData.refresh = 1;
+
     //RTC
       rtc_setup(RTC_INTERRUPT_PIN);
       
@@ -153,6 +158,7 @@ void loop() {
         alarmData.pulsingTime = millis();
         alarmData.pulsing = !alarmData.pulsing;
         //lcd.clear();
+        alarmData.refresh = 1;
         lcd.LCDClear(0x00);
       }
     }
@@ -162,6 +168,7 @@ void loop() {
       if (millis() > (alarmData.startTimePulse + TIMEDELAY)) {      //here we might have a bug when we get an overflow
         digitalWrite(LCD_LIGHT, HIGH);
         alarmData.pulseInfo = false;
+        alarmData.refresh = 1;
         lcd.LCDClear(0x00);
       }
     }
@@ -171,8 +178,10 @@ void loop() {
       
       case FSM_RST:
         alarmData.stateFSM = FSM_HOME;
-        //alarmData.stateFSM = FSM_RING;
-        //rtc_set_alarm(0,1);
+
+        //Disable alarm / timer
+          rtc_disable_alarm();
+          rtc_disable_timer();
         break;
     
       case FSM_HOME:
@@ -180,7 +189,8 @@ void loop() {
           if (topButton.buttonClicked) {
             alarmData.pulseInfo = true;
             digitalWrite(LCD_LIGHT, LOW); 
-            alarmData.startTimePulse = millis();  
+            alarmData.startTimePulse = millis();
+            alarmData.refresh = 1; 
           }  
         display_home();
         goFromHome();
@@ -246,8 +256,11 @@ void loop() {
         //print new state
           printState(alarmData.stateFSM);
           
-        //clear lcd
-          lcd.LCDClear(0x00);
+        //clear / refresh lcd
+          if (alarmData.stateFSM != FSM_RING) {
+            lcd.LCDClear(0x00);
+            alarmData.refresh = 1;
+          }
           
         //reset pulsing
           alarmData.startPulsing = 0;
