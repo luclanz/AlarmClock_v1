@@ -118,15 +118,6 @@ void goFromSetAlarm(){
 }
 
 void goFromTimer(){
-
-  //toggle timer
-  if (downButton.buttonClicked) {
-    alarmData.timerOnOff = !alarmData.timerOnOff;
-    //lcd.clear();
-    alarmData.refresh = 1;
-    lcd.LCDClear(0x00);
-  }
-  
   if (topButton.buttonClicked || upButton.buttonClicked) {
     alarmData.stateFSM = FSM_HOME;
     return;

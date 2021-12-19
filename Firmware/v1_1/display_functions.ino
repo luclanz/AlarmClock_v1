@@ -38,8 +38,20 @@ void display_home()
                       (rtc.now().minute() + alarmData.minutesOffset) & 0x00FF );    
       lcd.LCDgotoXY(0, 2);
       lcd.LCDString(time_string);
+      lcd.LCDFont(fontLetter);
+      lcd.LCDgotoXY(0, 1);
+      if (alarmData.alarmOnOff & alarmData.timerOnOff) {
+        lcd.LCDString("A T");
+      } else {
+        if (alarmData.alarmOnOff) {
+          lcd.LCDString("A");
+        }  
+        if (alarmData.timerOnOff) {
+          lcd.LCDString("T");
+        }     
+      } 
   
-    //Print Extra Info                          <-- THERE IS A BUG HERE
+    //Print Extra Info
       //Date
         lcd.LCDFont(fontLetter);
         if (alarmData.pulseInfo) {

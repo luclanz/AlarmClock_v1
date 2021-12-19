@@ -29,6 +29,25 @@ void state_alarm() {
 
 }
 
+void state_timer() {
+  //toggle timer
+  if (downButton.buttonClicked) {
+    alarmData.timerOnOff = !alarmData.timerOnOff;
+    alarmData.refresh = 1; 
+    lcd.LCDClear(0x00);
+
+    if (alarmData.timerOnOff) {
+      // set timer
+        rtc_set_timer( alarmData.timerSeconds + 60 * alarmData.timerMinutes);  
+    } else {
+      // abort alarm
+        rtc_disable_timer();
+    }
+  }
+  
+
+}
+
 void state_setTime () {
   
   //routine to inizialize the counter of the rotary when you want to change the time

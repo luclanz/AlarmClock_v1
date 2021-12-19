@@ -12,11 +12,19 @@ void sdAndSpeaker_setup() {
 
 void sdAndSpeaker_startMusicAlarm() {
   music.setVolume(4);
+  music.loop(1);
   music.play("Daybreak.wav");
   music.quality(2);
 }
 
-void sdAndSpeaker_stopMusicAlarm() {
+void sdAndSpeaker_startMusicTimer() {
+  music.setVolume(4);
+  music.loop(1);
+  music.play("Timer.wav");
+  music.quality(2);
+}
+
+void sdAndSpeaker_stopMusic() {
   music.disable();
 }
 

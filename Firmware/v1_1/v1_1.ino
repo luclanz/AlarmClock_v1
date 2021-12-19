@@ -108,8 +108,8 @@ void setup() {
       alarmData.startTimePulse = millis();
       alarmData.hoursOffset = 0;     
       alarmData.minutesOffset = 0;
-      alarmData.timerMinutes = 10;       
-      alarmData.timerSeconds = 0;
+      alarmData.timerMinutes = 0;                                // Change this    
+      alarmData.timerSeconds = 15;
       alarmData.timerOnOff = 0;
       alarmData.alarmHours = 7;
       alarmData.alarmMinutes = 0;
@@ -215,6 +215,7 @@ void loop() {
         break;
     
       case FSM_TIMER:
+        state_timer();
         display_timer();
         goFromTimer();
         break;
@@ -240,11 +241,11 @@ void loop() {
             exitRingAlarm();
           }
 
-        /*                                                                                  TODO
-         * if (alarmData.timerRinging) {
-         *   display_ring();
-         * }
-         */
+         
+         if (alarmData.timerRinging) {
+            exitRingTimer(); 
+         }
+         
 
         break;
     } 
