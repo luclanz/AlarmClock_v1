@@ -9,11 +9,6 @@
     - rotaryUpdateTimer()
     - enableRotaryISR() / disableRotaryISR()
 
-  TODO:
-    - remember to remove the print line in the ISR, too much time to execute!
-
-   !- change |= into &= and flip every bit in disableRotaryISR()!!!
-
 */
 
 void rotarySetupRoutine(){
@@ -35,8 +30,7 @@ void enableRotaryISR() {
 }
 
 void disableRotaryISR() {
-  PCICR &= B11111011;      //<--- TEST THIS!
-  //PCICR |= B00000000;   // flip this 1 to activate / deactivate the interrupt
+  PCICR &= B11111011;   // flip this 1 to activate / deactivate the interrupt
 }
 
 //ISR

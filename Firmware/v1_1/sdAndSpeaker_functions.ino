@@ -1,13 +1,24 @@
-void sdAndSpeaker_setup() {
+/*
 
+  Functions:
+
+    - sdAndSpeaker_setup();
+    - sdAndSpeaker_startMusicAlarm();
+    - sdAndSpeaker_startMusicTimer(); 
+    - sdAndSpeaker_stopMusic();
+
+*/
+
+void sdAndSpeaker_setup() {
+  //Set the speaker pin
     music.speakerPin = LM_IN;
-    if (!SD.begin(SD_CS)) {
-    Serial.println("SD fail");
-    Serial.flush();
-    abort();
-    //return;
-    }
     
+  //Check if the SD is correctly plugged in
+    if (!SD.begin(SD_CS)) {
+      Serial.println("SD fail");
+      Serial.flush();
+      abort();
+    }
 }
 
 void sdAndSpeaker_startMusicAlarm() {
@@ -29,6 +40,8 @@ void sdAndSpeaker_stopMusic() {
 }
 
 /*
+  Some commands I can use with the speaker:
+  
   TMRpcm audio;
   audio.play("filename");    plays a file
   audio.play("filename",30); plays a file starting at 30 seconds into the track

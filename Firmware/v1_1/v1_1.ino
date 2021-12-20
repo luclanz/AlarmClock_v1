@@ -63,7 +63,7 @@
       //Timer - Alarm Management
         uint8_t enteringRingMode :1;
         uint8_t alarmRinging :1;
-        uint8_t timerRinging :1;          // Later
+        uint8_t timerRinging :1;
         
     };
     
@@ -157,7 +157,6 @@ void loop() {
       if (millis() > alarmData.pulsingTime + PULSE) {
         alarmData.pulsingTime = millis();
         alarmData.pulsing = !alarmData.pulsing;
-        //lcd.clear();
         alarmData.refresh = 1;
         lcd.LCDClear(0x00);
       }
@@ -180,7 +179,7 @@ void loop() {
         alarmData.stateFSM = FSM_HOME;
 
         //Disable alarm / timer
-          rtc_disable_alarm();
+          rtc_disable_alarm();  //might disable those somewhere else
           rtc_disable_timer();
         break;
     
@@ -246,7 +245,6 @@ void loop() {
             exitRingTimer(); 
          }
          
-
         break;
     } 
 
@@ -267,7 +265,9 @@ void loop() {
           alarmData.startPulsing = 0;
         
         // Activate ROTARY and PULSING when entering "time_setting" states
-          if (alarmData.stateFSM == FSM_SETTIMER or alarmData.stateFSM == FSM_SETTIME or alarmData.stateFSM == FSM_SETALARM) {
+          if (alarmData.stateFSM == FSM_SETTIMER or 
+              alarmData.stateFSM == FSM_SETTIME or 
+              alarmData.stateFSM == FSM_SETALARM) {
             
             alarmData.rotaryInitCounter = true;
             alarmData.startPulsing = 1;

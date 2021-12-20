@@ -5,7 +5,7 @@
 
 //IOs ---------------------------------------------------------------------------------
   // PUSHBUTTON
-    #define BT_TOP 7      // TODO: might plan on making this into an external interrupt so I can wake this up (during pow management)
+    #define BT_TOP 7
     #define BT_UP 8
     #define BT_DOWN 9
 

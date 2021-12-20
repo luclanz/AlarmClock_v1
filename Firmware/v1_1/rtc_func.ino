@@ -13,51 +13,49 @@
 */
 
 
-
-void rtc_setup(int interrupt) //int: interrupt pin for the ds3231
-{
   
+void rtc_setup(int interrupt) {
+  //This function needs the interrupt pin for the alarms (also wake / sleep)
+
+  //Check RTC module correctly connected
     if(!rtc.begin()) {
         Serial.println(F("Couldn't find RTC!"));
         Serial.flush();
         abort();
     }
 
+  //Check if the device went out of juice (never tried this line of code)
     if(rtc.lostPower()) {
-        // if 1 it means the RTC lost track of time, first member: const DateTime, secondo member: dt
+      rtc.adjust(DateTime(F(__DATE__), F(__TIME__))); 
+    }
+
+  // RUN THIS LINE IF THE TIME GETS OUT OF TRACK
     //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
         
-    }
-    
-    // RUN THIS LINE IF THE TIME GETS OUT OF TRACK
-    //rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
-    
-    //we don't need the 32K Pin, so disable it
+  //Disable the 32K Pin
     rtc.disable32K();
     
-    // Making it so, that the alarm will trigger an interrupt
-    
+  //Setup the interrupt
     pinMode(interrupt, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(interrupt), rtc_onAlarm, FALLING);
 
-    // set alarm 1, 2 flag to false (so alarm 1, 2 didn't happen so far)
-    // if not done, this easily leads to problems, as both register aren't reset on reboot/recompile
+  //Clear the old alarms (just in case)
     rtc.clearAlarm(1);
     rtc.clearAlarm(2);
     
-    // stop oscillating signals at SQW Pin
-    // now the SQW pin will stay up untill an alarm occurs
+  //Set the right responce for the interrupt, now the SQW pin will stay up untill an alarm occurs
     rtc.writeSqwPinMode(DS3231_OFF);
     
-    // turn off alarms
+  // turn off alarms
     rtc.disableAlarm(1);
     rtc.disableAlarm(2);
 }
 
 
-void rtc_set_timer (int sec_to_alarm) //int: second of the timer 
-{
-      // schedule an alarm sec_to_alarm seconds in the future --> NOTE: FOR THE TIMER WE SET THE SECOND ALARM ?
+void rtc_set_timer (int sec_to_alarm) { 
+  //This function sets the timer alarm, the input are the seconds 
+
+  //Set the alarm, check the DS3231_A1_Hour mode
     if(!rtc.setAlarm1(
             rtc.now() + TimeSpan(0,0,0,sec_to_alarm),     //with this it will set a timespan of (dd, hh, mm, ss).
             DS3231_A1_Hour                                //This mode triggers the alarm when the seconds match.
@@ -70,8 +68,10 @@ void rtc_set_timer (int sec_to_alarm) //int: second of the timer
     }
 }
 
-void rtc_set_alarm (int delta_h, int delta_m) 
-{
+void rtc_set_alarm (int delta_h, int delta_m) {
+  //This function sets the alarm, the input are the hours and minutes from the alarm.
+
+  //Set the alarm, check the DS3231_A2_Hour mode
     if(!rtc.setAlarm2(
             rtc.now() + TimeSpan(0, delta_h, delta_m, 0),     //With this it will set a timespan of (dd, hh, mm, ss).
             DS3231_A2_Hour                                    //This mode triggers the alarm when the seconds match. 
@@ -87,22 +87,23 @@ void rtc_set_alarm (int delta_h, int delta_m)
     }
 }
 
-int rtc_minutes_to_alarm (int m, int m_alarm) //first: actual time, second: desired alarm time
-{
-  if (m_alarm < m) {
-    return (m_alarm + 60 - m);
-  }
-
-  return (m_alarm - m);
+int rtc_minutes_to_alarm (int m, int m_alarm) {
+  //This function will calculate the missing minutes from the desired alarm.
+  // m: actual minutes, m_alarm: minutes of the alarm
+    if (m_alarm < m) {
+      return (m_alarm + 60 - m);
+    }
+    return (m_alarm - m);
 }
 
-int rtc_hours_to_alarm (int h, int h_alarm, bool carrier) //first: actual time, second: desired alarm time, third: (m_alarm < m)
-{
-  if (h_alarm < h) {
-    return (h_alarm + 24 - h - 1 * carrier); 
-  }
-
-  return (h_alarm - h - 1 * carrier);
+int rtc_hours_to_alarm (int h, int h_alarm, bool carrier) {
+  //This function will calculate the missing hours from the desired alarm
+  //first: actual time, second: desired alarm time, third: (m_alarm < m) <-- NOTE: this must result a bool value
+    if (h_alarm < h) {
+      return (h_alarm + 24 - h - 1 * carrier); 
+    }
+  
+    return (h_alarm - h - 1 * carrier);
 }
 
 void rtc_disable_timer() {
