@@ -4,7 +4,7 @@
 
     - rotarySetupRoutine()                          * check when managing the interrupt
     - rotaryPolling()
-    - rotaryUpdateTime()                            * those next three function may be called less frequently
+    - rotaryUpdateTime()
     - rotaryUpdateAlarm()
     - rotaryUpdateTimer()
     - enableRotaryISR() / disableRotaryISR()

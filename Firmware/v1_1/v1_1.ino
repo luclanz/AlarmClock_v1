@@ -26,6 +26,7 @@
 
       //Display Refresh
         uint8_t refresh :1;
+        uint32_t refreshWatchDog;
 
       //For setting time (UX)
         boolean pulsing :1;
@@ -125,6 +126,7 @@ void setup() {
       alarmData.alarmRinging = 0;
 
       alarmData.refresh = 1;
+      alarmData.refreshWatchDog = millis();
 
     //RTC
       rtc_setup(RTC_INTERRUPT_PIN);
@@ -162,9 +164,14 @@ void loop() {
       }
     }
 
+  //refresh display timeout
+    if (millis() > alarmData.refreshWatchDog + REFRESHRUNOUT) {
+      alarmData.refresh = 1;
+    }
+
   //light pulse when pressing top in home
     if (alarmData.pulseInfo) {
-      if (millis() > (alarmData.startTimePulse + TIMEDELAY)) {      //here we might have a bug when we get an overflow
+      if (millis() > (alarmData.startTimePulse + TIMEDELAY)) {  //here we might have a bug when we get an overflow (to be checked)
         digitalWrite(LCD_LIGHT, HIGH);
         alarmData.pulseInfo = false;
         alarmData.refresh = 1;
@@ -177,10 +184,6 @@ void loop() {
       
       case FSM_RST:
         alarmData.stateFSM = FSM_HOME;
-
-        //Disable alarm / timer
-          rtc_disable_alarm();  //might disable those somewhere else
-          rtc_disable_timer();
         break;
     
       case FSM_HOME:

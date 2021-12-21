@@ -1,6 +1,6 @@
 /*
- * Functions        display_setup()
- *                  display_X()
+ * Functions        - display_setup()
+ *                  - display_X()
  *  
  * Init arguments   1: bool, set to true to invert display pixel color
  *                  2: HEX, default is 0xBF set in LCDinit, Try 0xB1 <-> 0xBF if your display is too dark

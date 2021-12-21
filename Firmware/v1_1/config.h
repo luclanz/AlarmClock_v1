@@ -41,6 +41,7 @@
   // internal pulse
     #define TIMEDELAY 2000
     #define PULSE 400
+    #define REFRESHRUNOUT 30000
     
   // FSM
     #define FSM_RST 0

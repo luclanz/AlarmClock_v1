@@ -54,6 +54,9 @@ void exitRingAlarm(){
 
     // reset LCD light
       digitalWrite(LCD_LIGHT, HIGH); 
+
+    //
+      rtc_disable_alarm();
   }
  
 }
@@ -71,7 +74,10 @@ void exitRingTimer(){
       delay(100);
 
     // reset LCD light
-      digitalWrite(LCD_LIGHT, HIGH); 
+      digitalWrite(LCD_LIGHT, HIGH);
+
+    //
+      rtc_disable_timer();
   }
  
 }

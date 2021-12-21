@@ -15,7 +15,7 @@ Feel free to use, change or improve any of my design.
 # Project roadmap:
 
   1. Scope definition / Hardware selection
-  2. --> Firmware / Breadboard prototyping
-  3. Arduino stripping / Power management
+  2. Firmware / Breadboard prototyping
+  3. --> Arduino stripping / Power management
   4. PCB design
   5. CAD modelling

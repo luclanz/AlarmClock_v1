@@ -72,6 +72,7 @@ void goFromAlarm(){
   
   if (downButton.buttonHolded) {
     alarmData.stateFSM = FSM_SETALARM;
+    rtc_disable_alarm();
     return;
   }
   
@@ -125,6 +126,7 @@ void goFromTimer(){
   
   if (downButton.buttonHolded) {
     alarmData.stateFSM = FSM_SETTIMER;
+    rtc_disable_timer();
     return;
   }
   

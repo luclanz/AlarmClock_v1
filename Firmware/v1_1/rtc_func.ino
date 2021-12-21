@@ -121,4 +121,5 @@ void rtc_disable_alarm() {
 void rtc_onAlarm() {
     alarmData.enteringRingMode = 1;
     alarmData.stateFSM = FSM_RING;
+    sdAndSpeaker_stopMusic();
 }
